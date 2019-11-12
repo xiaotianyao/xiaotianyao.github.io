@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>[AtcoderAgc034E]Complete Compress</title>
+    <url>/2019/11/12/%5BAtcoderAgc034E%5DComplete%20Compress/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>树上有一些碎片，每次可以选择两个距离大于1的碎片在它们的最短路径上分别靠近一格，最终使得它们聚在任意一点</p>
+<p>求最小的步数或告知不可能</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>对于一整棵树，如果根节点的所有子节点到它的距离和为偶数</p>
+<p>且子树中到根距离和最大值不大于这棵整棵树到根的距离和的1/2，就是可行的</p>
+<p><strong>注：等价于这个问题，有{\(a_i\)}，每次选择两个数各减去1，使最终和最小</strong></p>
+<p><strong>如果\(2Max&gt;sum\)，最少距离和为\(2Max-sum\)，否则与原sum的奇偶性相同（0或1）</strong></p>
+<p>因此每次要递归地尽量把到根距离和最大的子树的和变得最小</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>真的是做了整整一个晚上<del>机房好吵啊</del></p>
+<p>用sdep[v]算到根的距离和没有考虑v是否也对距离和有贡献（s[v]==‘1’）<br><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> int long long</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">2005</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">E</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> to, nxt;</span><br><span class="line">&#125;e[maxn &lt;&lt; <span class="number">1</span>];</span><br><span class="line"><span class="keyword">int</span> head[maxn], tot = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span></span>&#123;</span><br><span class="line">	e[++tot].to = v, e[tot].nxt = head[u];</span><br><span class="line">	head[u] = tot;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> dep[maxn], sz[maxn], sdep[maxn], sum; <span class="keyword">char</span> s[maxn];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs1</span><span class="params">(<span class="keyword">int</span> cur, <span class="keyword">int</span> fa)</span></span>&#123;</span><br><span class="line">	dep[cur] = dep[fa] + <span class="number">1</span>;</span><br><span class="line">	sum += (dep[cur] - <span class="number">1</span>) * (s[cur] == <span class="string">'1'</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = head[cur]; i; i = e[i].nxt)&#123;</span><br><span class="line">		<span class="keyword">int</span> v = e[i].to;</span><br><span class="line">		<span class="keyword">if</span> (v != fa)&#123;</span><br><span class="line">			dfs1(v, cur);</span><br><span class="line">			sz[cur] += sz[v] + (s[v] == <span class="string">'1'</span>);</span><br><span class="line">			sdep[cur] += sdep[v] + sz[v] + (s[v] == <span class="string">'1'</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs2</span><span class="params">(<span class="keyword">int</span> cur, <span class="keyword">int</span> fa)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> link = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = head[cur]; i; i = e[i].nxt)&#123;</span><br><span class="line">		<span class="keyword">int</span> v = e[i].to;</span><br><span class="line">		<span class="keyword">if</span> (v == fa) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="keyword">if</span> (sdep[v] + sz[v] + (s[v] == <span class="string">'1'</span>) &gt; sdep[link] + sz[link] + (s[link] == <span class="string">'1'</span>) || link == <span class="number">0</span>) link = v;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (link == <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">	dfs2(link, cur); sdep[cur] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = head[cur]; i; i = e[i].nxt)</span><br><span class="line">		<span class="keyword">if</span> (e[i].to != fa) sdep[cur] += sdep[e[i].to] + sz[e[i].to] + (s[e[i].to] == <span class="string">'1'</span>);</span><br><span class="line">	<span class="keyword">if</span> (<span class="number">2l</span>l * (sdep[link] + sz[link] + (s[link] == <span class="string">'1'</span>)) &gt; sdep[cur]) sdep[cur] = <span class="number">2l</span>l * (sdep[link] + sz[link] + (s[link] == <span class="string">'1'</span>)) - sdep[cur];</span><br><span class="line">	<span class="keyword">else</span> sdep[cur] = sdep[cur] &amp; <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n, ans = INF;</span><br><span class="line"><span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%lld%s"</span>, &amp;n, s + <span class="number">1</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> u, v, i = <span class="number">1</span>; i &lt; n; i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%lld%lld"</span>, &amp;u, &amp;v);</span><br><span class="line">		addedge(u, v); addedge(v, u);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> rt = <span class="number">1</span>; rt &lt;= n; rt++)&#123;</span><br><span class="line">		<span class="built_in">memset</span>(dep, <span class="number">0</span>, <span class="keyword">sizeof</span> dep); <span class="built_in">memset</span>(sz, <span class="number">0</span>, <span class="keyword">sizeof</span> sz); sum = <span class="number">0</span>;</span><br><span class="line">		<span class="built_in">memset</span>(sdep, <span class="number">0</span>, <span class="keyword">sizeof</span> sdep);</span><br><span class="line">		dfs1(rt, <span class="number">0</span>); <span class="keyword">if</span> (sum &amp; <span class="number">1</span>) <span class="keyword">continue</span>;</span><br><span class="line">		dfs2(rt, <span class="number">0</span>);</span><br><span class="line">		<span class="keyword">if</span> (sdep[rt] == <span class="number">0</span>) ans = min(ans, sum &gt;&gt; <span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (ans == INF) ans = <span class="number">-1</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <tags>
+        <tag>树</tag>
+        <tag>贪心</tag>
+        <tag>递归</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[HNOI2012]矿场搭建</title>
-    <url>/2019/11/12/HNOI2012-%E7%9F%BF%E5%9C%BA%E6%90%AD%E5%BB%BA/</url>
+    <url>/2019/11/12/%5BHNOI2012%5D%E7%9F%BF%E5%9C%BA%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>在无向联通图中设置一些庇护所，使得任何1个点被删掉之后（同时在该地的庇护所也失效），所有点（包括删掉的这个点）都能到达至少一个庇护所</p>
 <p>求最小的庇护所数及最优的方案数</p>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><a id="more"></a>
@@ -20,7 +39,7 @@
   </entry>
   <entry>
     <title>[SOJ689]数字</title>
-    <url>/2019/11/11/SOJ689-%E6%95%B0%E5%AD%97/</url>
+    <url>/2019/11/11/%5BSOJ689%5D%E6%95%B0%E5%AD%97/</url>
     <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
   <div class="hbe-input-container">
   <input type="password" id="hbePass" placeholder="Hey, password is required here." />
@@ -36,7 +55,7 @@
   </entry>
   <entry>
     <title>[APIO2009]采油区域</title>
-    <url>/2019/11/11/APIO2009-%E9%87%87%E6%B2%B9%E5%8C%BA%E5%9F%9F/</url>
+    <url>/2019/11/11/%5BAPIO2009%5D%E9%87%87%E6%B2%B9%E5%8C%BA%E5%9F%9F/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>在nm的非负权值网格中放3个k*k的不重叠正方形，求3个正方形的权值和最大值</p>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><a id="more"></a>
 <p><del>题解里说，过一个疯一个呢，我看没有</del></p>
@@ -51,8 +70,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Usage 1</title>
-    <url>/2019/11/11/Usage-1/</url>
+    <title>[Usage]1</title>
+    <url>/2019/11/11/%5BUsage%5D1/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
 <a id="more"></a>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
