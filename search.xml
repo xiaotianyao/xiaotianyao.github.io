@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>[CF852E]Casinos and travel</title>
+    <url>/2019/11/15/%5BCF852E%5DCasinos%20and%20travel/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>给出一棵树，定义$f(t)$为以t为根，从根到叶子节点的所有链上白格子数为偶数，的黑白染色方案数</p>
+<p>求$\sum_{i=1}^n f(i)$</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>先写个Dp，发现每一棵有根树的答案为：</p>
+<p>令$x$为n-叶子节点的个数，则$f(t)=2^x$</p>
+<p>$O(n)$求和即可</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>想到结论就好了<del>不会证也没事</del></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mo = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> ind[maxn], n, c, ans;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pow</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> t)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">1</span>; x %= mo;</span><br><span class="line">	<span class="keyword">while</span> (t &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span> (t &amp; <span class="number">1</span>) res = <span class="number">1l</span>l * res * x % mo;</span><br><span class="line">		x = <span class="number">1l</span>l * x * x % mo;</span><br><span class="line">		t &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> u, v, i = <span class="number">1</span>; i &lt; n; i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;u, &amp;v);</span><br><span class="line">		ind[u]++, ind[v]++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">		<span class="keyword">if</span> (ind[i] &gt; <span class="number">1</span>) ++c;</span><br><span class="line">	<span class="keyword">int</span> P = <span class="built_in">pow</span>(<span class="number">2</span>, c);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">		<span class="keyword">if</span> (ind[i] == <span class="number">1</span>) ans = (ans + <span class="number">2l</span>l * P % mo) % mo;</span><br><span class="line">		<span class="keyword">else</span> ans = (ans + P) % mo;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Codeforces</category>
+      </categories>
+      <tags>
+        <tag>树</tag>
+        <tag>idea</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[CF254C]Anagram</title>
+    <url>/2019/11/15/%5BCF254C%5DAnagram/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>替换最少数量的字符，使得A中的每个大写字符个数都与B中相同</p>
+<p>输出最少替换次数以及字典序最小的方案</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>完完全全<del>一道傻逼题</del>，考场脑子坏掉了</p>
+<p>最少次数显然，输出方案就从后往前，替换字符更小或者不能再协调就替换，不然先不替换</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>犯了一堆神奇的错误，还是思路实现不清晰啊</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">char</span> a[maxn], b[maxn]; <span class="keyword">int</span> n, cnt[<span class="number">26</span>], c[<span class="number">2</span>][<span class="number">26</span>];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="comment">//	freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);</span></span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%s%s"</span>, a + <span class="number">1</span>, b + <span class="number">1</span>);</span><br><span class="line">	<span class="keyword">int</span> n = <span class="built_in">strlen</span>(a + <span class="number">1</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) cnt[a[i] - <span class="string">'A'</span>]++, cnt[b[i] - <span class="string">'A'</span>]--, c[<span class="number">0</span>][a[i] - <span class="string">'A'</span>]++;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">0</span>, x = <span class="number">-1</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">26</span>; j++)&#123;</span><br><span class="line">		res += max(cnt[j], <span class="number">0</span>);</span><br><span class="line">		<span class="keyword">if</span> (cnt[j] &lt; <span class="number">0</span> &amp;&amp; x == <span class="number">-1</span>) x = j;</span><br><span class="line">		<span class="keyword">if</span> (cnt[j] &gt; <span class="number">0</span>) c[<span class="number">1</span>][j] = cnt[j];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, res);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (cnt[a[i] - <span class="string">'A'</span>] == <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="keyword">if</span> (cnt[a[i] - <span class="string">'A'</span>] &gt; <span class="number">0</span>)&#123;</span><br><span class="line">			<span class="keyword">if</span> (a[i] - <span class="string">'A'</span> &gt; x || c[<span class="number">0</span>][a[i] - <span class="string">'A'</span>] == c[<span class="number">1</span>][a[i] - <span class="string">'A'</span>])&#123;</span><br><span class="line">				--cnt[a[i] - <span class="string">'A'</span>]; --c[<span class="number">0</span>][a[i] - <span class="string">'A'</span>]; --c[<span class="number">1</span>][a[i] - <span class="string">'A'</span>];</span><br><span class="line">				a[i] = x + <span class="string">'A'</span>;</span><br><span class="line">				++cnt[x];</span><br><span class="line">				<span class="keyword">while</span> (cnt[x] &gt;= <span class="number">0</span> &amp;&amp; x &lt; <span class="number">25</span>) ++x;</span><br><span class="line">			&#125; <span class="keyword">else</span> c[<span class="number">0</span>][a[i] - <span class="string">'A'</span>]--;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, a + <span class="number">1</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>CodeForces</category>
+      </categories>
+      <tags>
+        <tag>细节</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[JOI2019]三级跳</title>
     <url>/2019/11/15/%5BJOI2019%5D%E4%B8%89%E7%BA%A7%E8%B7%B3/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>给出${w_i}$，多次询问给出l，r，求满足$l\leq a&lt;b&lt;c\leq r$，$b-a\leq c-b$的$w_a+w_b+w_c$的最大值</p>
@@ -170,10 +204,10 @@
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>调试很久</tag>
         <tag>树</tag>
         <tag>贪心</tag>
         <tag>递归</tag>
+        <tag>调试很久</tag>
       </tags>
   </entry>
   <entry>
@@ -277,11 +311,11 @@
         <category>CTSC</category>
       </categories>
       <tags>
+        <tag>调试很久</tag>
         <tag>网络流</tag>
         <tag>图论</tag>
         <tag>构造</tag>
         <tag>二分图</tag>
-        <tag>调试很久</tag>
       </tags>
   </entry>
 </search>
