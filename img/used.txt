@@ -5,3 +5,5 @@ gobi
 lake-in-sand
 mountains
 sunshine
+winter-sun
+icy-lighthouse
