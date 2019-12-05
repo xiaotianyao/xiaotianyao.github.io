@@ -7,3 +7,4 @@ mountains
 sunshine
 winter-sun
 icy-lighthouse
+gobi2
