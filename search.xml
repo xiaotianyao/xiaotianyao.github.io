@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>[AGC023F]01 on tree</title>
+    <url>/2019/12/06/%5BAGC023F%5D01%20on%20tree/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>给出一棵权值为01的树，找到一个拓扑序列，使得权值序列中逆序对对数最少</p>
+<p>求最小值</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>考虑两个拓扑序的合并，令$a_1,b_1,a_2,b_2$分别为序列1,2中01的个数</p>
+<p>当$b_1\cdot a_2\leq a_1\cdot b_2$即$\frac{b_1}{a_1}\leq\frac{b_2}{a_2}$时，序列1在前面更优</p>
+<p>满足排序性质，用堆维护</p>
+<p>每次找最小的序列和父亲的序列合并一定最优，局部最优必定导致全局最优</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>1不能再合并，不要加进去</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LL long long</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">2e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> f[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getf</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;<span class="keyword">return</span> x == f[x] ? x : f[x] = getf(f[x]);&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> a, b, id;</span><br><span class="line">	<span class="keyword">bool</span> <span class="keyword">operator</span>&lt;(A x)<span class="keyword">const</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1l</span>l * b * x.a &gt; <span class="number">1l</span>l * a * x.b;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">bool</span> <span class="keyword">operator</span>!=(A x)<span class="keyword">const</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> a != x.a || b != x.b;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;a[maxn]; LL ans = <span class="number">0</span>;</span><br><span class="line">priority_queue &lt;A&gt; q;</span><br><span class="line"><span class="keyword">int</span> n, anc[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">"%d"</span>, anc + i);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> val, i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;val);</span><br><span class="line">		f[i] = i;</span><br><span class="line">		<span class="keyword">if</span> (val == <span class="number">0</span>) a[i] = (A)&#123;<span class="number">1</span>, <span class="number">0</span>, i&#125;;</span><br><span class="line">		<span class="keyword">else</span> a[i] = (A)&#123;<span class="number">0</span>, <span class="number">1</span>, i&#125;;</span><br><span class="line">		<span class="keyword">if</span> (i != <span class="number">1</span>) q.push(a[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (!q.empty())&#123;</span><br><span class="line">		A t = q.top(); q.pop();</span><br><span class="line">		<span class="keyword">int</span> cur = getf(t.id);</span><br><span class="line">		<span class="keyword">if</span> (a[cur] != t) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="keyword">int</span> fa = getf(anc[cur]);</span><br><span class="line">		ans += <span class="number">1l</span>l * a[fa].b * a[cur].a;</span><br><span class="line">		a[fa].a += a[cur].a;</span><br><span class="line">		a[fa].b += a[cur].b;</span><br><span class="line">		f[getf(cur)] = f[getf(fa)];</span><br><span class="line">		<span class="keyword">if</span> (fa != <span class="number">1</span>) q.push(a[fa]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Atcoder</category>
+      </categories>
+      <tags>
+        <tag>树，贪心</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[ZJOI2019]语言</title>
     <url>/2019/12/05/%5BZJOI2019%5D%E8%AF%AD%E8%A8%80/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>给出一棵无根树和树上的若干条链</p>
@@ -196,8 +214,8 @@
         <category>NOIP</category>
       </categories>
       <tags>
-        <tag>细节</tag>
         <tag>树</tag>
+        <tag>细节</tag>
         <tag>差分</tag>
       </tags>
   </entry>

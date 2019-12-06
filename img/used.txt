@@ -2,9 +2,9 @@ animals
 field
 goat
 gobi
+gobi2
+icy-lighthouse
 lake-in-sand
 mountains
 sunshine
 winter-sun
-icy-lighthouse
-gobi2
