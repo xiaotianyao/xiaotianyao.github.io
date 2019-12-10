@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>[CF708E]Student's Camp</title>
+    <url>/2019/12/09/%5BCF708E%5DStudent&#39;s%20Camp/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>有$(n+2)\cdot m$的矩阵，第2~n+1行最左的砖块和最右的砖块分别在白天和晚上有$P=\frac{A}{B}$的概率被毁</p>
+<p>暴风雨持续了k天k夜，问k天之后整个矩阵仍然联通（共边）的概率，对1e9+7取模</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>令$f_{T,l,r}$为第T行剩下l~r的砖块且上方全部联通的概率，$p_i$为第i块砖恰好留下的概率</p>
+<p>得到一个naive的递推式</p>
+<script type="math/tex; mode=display">
+f_{T,l,r}=p_l\cdot p_{m-r}\cdot \sum_{[x,y]与[l,r]有交}f_{T-1,x,y}</script><p>用前缀和优化， 令$sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}$，$ssf_{T,j}=\sum_{1\leq i\leq j}sf_{T,i}$</p>
+<p>则</p>
+<script type="math/tex; mode=display">
+f_{T,l,r}=p_l\cdot p_{m-r}\cdot(\sum_{1\leq i\leq j\leq m}f_{T-1,i,j}-\sum_{1\leq i\leq j\leq l-1}f_{T-1,i,j}-\sum_{r+1\leq i\leq j\leq m})</script><p>利用对称性翻转区间，$f_{T,x,y}=f_{T,m-y+1,m-x+1}$</p>
+<script type="math/tex; mode=display">
+f_{T,l,r}=p_l\cdot p_{m-r}\cdot(\sum_{1\leq i\leq j\leq m}f_{T-1,i,j}-\sum_{1\leq i\leq j\leq l-1}f_{T-1,i,j}-\sum_{1\leq i\leq j\leq m-r})</script><script type="math/tex; mode=display">
+=p_l\cdot p_{m-r}\cdot (ssf_{T-1,m} - ssf_{T-1,l-1} - ssf_{T-1,m-r})</script><p>又可以发现</p>
+<script type="math/tex; mode=display">
+sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ssf_{T-1,m}-ssf_{T-1,m-j})-p_{m-j}\cdot \sum_{1\leq i\leq j}p_i\cdot ssf_{T-1,i-1}</script><p>直接维护sf和ssf就做完了 $\theta(n\cdot m)$</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>初始化的时候fac和inv求得不够，应该求到k</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LL long long</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1505</span>;</span><br><span class="line"><span class="keyword">const</span> LL mo = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="function">LL <span class="title">pow</span><span class="params">(LL x, LL t)</span></span>&#123;</span><br><span class="line">    x %= mo; LL res = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (t &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (t &amp; <span class="number">1</span>) res = <span class="number">1l</span>l * res * x % mo;</span><br><span class="line">        x = <span class="number">1l</span>l * x * x % mo;</span><br><span class="line">        t &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n, m, k, A, B;</span><br><span class="line">LL P, p[maxn], sp[maxn], fac[maxn * <span class="number">100</span>], inv[maxn * <span class="number">100</span>];</span><br><span class="line"><span class="function">LL <span class="title">C</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> m)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (m == <span class="number">0</span> || m == n) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (m &gt; n) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> fac[n] * inv[m] % mo * inv[n - m] % mo;</span><br><span class="line">&#125;</span><br><span class="line">LL sf[maxn][maxn], ssf[maxn][maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d%d%d%d%d"</span>, &amp;n, &amp;m, &amp;A, &amp;B, &amp;k);</span><br><span class="line">    P = <span class="number">1l</span>l * A * <span class="built_in">pow</span>(B, mo - <span class="number">2</span>) % mo; fac[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= k; i++) fac[i] = <span class="number">1l</span>l * fac[i - <span class="number">1</span>] * i % mo;</span><br><span class="line">    inv[k] = <span class="built_in">pow</span>(fac[k], mo - <span class="number">2</span>); <span class="keyword">for</span> (<span class="keyword">int</span> i = k - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) inv[i] = <span class="number">1l</span>l * inv[i + <span class="number">1</span>] * (i + <span class="number">1</span>) % mo;</span><br><span class="line"><span class="comment">//    printf("::%lld\n", C(5, 2));</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= m; j++) p[j] = <span class="number">1l</span>l * <span class="built_in">pow</span>(P, j) * <span class="built_in">pow</span>(<span class="number">1</span> + mo - P, k - j) % mo * C(k, j) % mo;</span><br><span class="line">    sp[<span class="number">0</span>] = p[<span class="number">0</span>]; <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++) sp[j] = (sp[j - <span class="number">1</span>] + p[j]) % mo;</span><br><span class="line">    sf[<span class="number">0</span>][m] = ssf[<span class="number">0</span>][m] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> T = <span class="number">1</span>; T &lt;= n; T++)&#123;</span><br><span class="line">        <span class="keyword">int</span> S = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++)&#123;</span><br><span class="line">            S = (S + <span class="number">1l</span>l * ssf[T - <span class="number">1</span>][j - <span class="number">1</span>] * p[j - <span class="number">1</span>] % mo) % mo;</span><br><span class="line">            sf[T][j] = (sf[T][j] + mo + <span class="number">1l</span>l * sp[j - <span class="number">1</span>] * p[m - j] % mo * (ssf[T - <span class="number">1</span>][m] - ssf[T - <span class="number">1</span>][m - j]) % mo) % mo;</span><br><span class="line">            sf[T][j] = (sf[T][j] + mo - <span class="number">1l</span>l * S * p[m - j] % mo) % mo;</span><br><span class="line">            ssf[T][j] = (ssf[T][j - <span class="number">1</span>] + sf[T][j]) % mo;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ssf[n][m]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Codeforces</category>
+      </categories>
+      <tags>
+        <tag>动态规划Dp</tag>
+        <tag>前缀和</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[HNOI2012]永无乡</title>
     <url>/2019/12/08/%5BHNOI2012%5D%E6%B0%B8%E6%97%A0%E4%B9%A1/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>对于一些点，支持连边和求联通块中第k重要的点</p>
@@ -176,8 +203,8 @@
         <category>JOI</category>
       </categories>
       <tags>
-        <tag>状态缩减</tag>
         <tag>线段树</tag>
+        <tag>状态缩减</tag>
         <tag>扫描线</tag>
         <tag>单调栈</tag>
       </tags>
