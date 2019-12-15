@@ -13,13 +13,10 @@
     
 
     
-        <meta name="description" content="题意给出一棵树，定义$f(t)$为以t为根，从根到叶子节点的所有链上白格子数为偶数，的黑白染色方案数
-求$\sum_{i=1}^n f(i)$
-题解先写个Dp，发现每一棵有根树的答案为：
-令$x$为n-叶子节点的个数，则$f(t)=2^x$
-$O(n)$求和即可
-调试记录想到结论就好了不会证也没事
-"/>
+        <meta name="description" content="题意求在$n\cdot m$的棋盘上摆放一些炮，使得任意两个炮不能互相攻击的方案数
+题解对于每一列，显然只能有0或1或2个炮，这是列中不能攻击的充要条件
+令$f_{i,j,k}$为考虑前i行，其中有j列有1个炮，k列有两个炮的方案数，这也意味着有$m-i-j$列没有放棋子
+分当前行放0或1或2个棋子"/>
     
 
     <!--Author-->
@@ -29,18 +26,15 @@ $O(n)$求和即可
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="[CF852E]Casinos and travel"/>
+        <meta property="og:title" content="[AHOI2009]中国象棋"/>
     
 
     <!--Open Graph Description-->
     
-        <meta property="og:description" content="题意给出一棵树，定义$f(t)$为以t为根，从根到叶子节点的所有链上白格子数为偶数，的黑白染色方案数
-求$\sum_{i=1}^n f(i)$
-题解先写个Dp，发现每一棵有根树的答案为：
-令$x$为n-叶子节点的个数，则$f(t)=2^x$
-$O(n)$求和即可
-调试记录想到结论就好了不会证也没事
-"/>
+        <meta property="og:description" content="题意求在$n\cdot m$的棋盘上摆放一些炮，使得任意两个炮不能互相攻击的方案数
+题解对于每一列，显然只能有0或1或2个炮，这是列中不能攻击的充要条件
+令$f_{i,j,k}$为考虑前i行，其中有j列有1个炮，k列有两个炮的方案数，这也意味着有$m-i-j$列没有放棋子
+分当前行放0或1或2个棋子"/>
     
 
     <!--Open Graph Site Name-->
@@ -67,7 +61,7 @@ $O(n)$求和即可
 
     <!-- Title -->
     
-    <title>[CF852E]Casinos and travel - XiaoTianyao&#39;s Blog</title>
+    <title>[AHOI2009]中国象棋 - XiaoTianyao&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -177,13 +171,13 @@ $O(n)$求和即可
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
-                    <h1>[CF852E]Casinos and travel</h1>
+                    <h1>[AHOI2009]中国象棋</h1>
                     
                     <span class="meta">
                         <!-- Date and Author -->
                         
                         
-                            2019-11-15
+                            2019-12-15
                         
                     </span>
                 </div>
@@ -204,7 +198,7 @@ $O(n)$求和即可
                         
 
 
-<a href="/tags/idea/">#idea</a> <a href="/tags/树/">#树</a>
+<a href="/tags/动态规划Dp/">#动态规划Dp</a> <a href="/tags/idea/">#idea</a>
 
 
                     
@@ -213,7 +207,7 @@ $O(n)$求和即可
                     
                         
 
-<a href="/categories/Codeforces/">Codeforces</a>
+<a href="/categories/AHOI/">AHOI</a>
 
                     
                 </div>
@@ -224,13 +218,13 @@ $O(n)$求和即可
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>给出一棵树，定义$f(t)$为以t为根，从根到叶子节点的所有链上白格子数为偶数，的黑白染色方案数</p>
-<p>求$\sum_{i=1}^n f(i)$</p>
-<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>先写个Dp，发现每一棵有根树的答案为：</p>
-<p>令$x$为n-叶子节点的个数，则$f(t)=2^x$</p>
-<p>$O(n)$求和即可</p>
-<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>想到结论就好了<del>不会证也没事</del></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mo = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> ind[maxn], n, c, ans;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pow</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> t)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">1</span>; x %= mo;</span><br><span class="line">	<span class="keyword">while</span> (t &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span> (t &amp; <span class="number">1</span>) res = <span class="number">1l</span>l * res * x % mo;</span><br><span class="line">		x = <span class="number">1l</span>l * x * x % mo;</span><br><span class="line">		t &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> u, v, i = <span class="number">1</span>; i &lt; n; i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;u, &amp;v);</span><br><span class="line">		ind[u]++, ind[v]++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">		<span class="keyword">if</span> (ind[i] &gt; <span class="number">1</span>) ++c;</span><br><span class="line">	<span class="keyword">int</span> P = <span class="built_in">pow</span>(<span class="number">2</span>, c);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">		<span class="keyword">if</span> (ind[i] == <span class="number">1</span>) ans = (ans + <span class="number">2l</span>l * P % mo) % mo;</span><br><span class="line">		<span class="keyword">else</span> ans = (ans + P) % mo;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+                <h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>求在$n\cdot m$的棋盘上摆放一些炮，使得任意两个炮不能互相攻击的方案数</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>对于每一列，显然只能有0或1或2个炮，这是列中不能攻击的充要条件</p>
+<p>令$f_{i,j,k}$为考虑前i行，其中有j列有1个炮，k列有两个炮的方案数，这也意味着有$m-i-j$列没有放棋子</p>
+<p>分当前行放0或1或2个棋子讨论即可</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>不必维护行的信息，在转移的时候行就是满足条件的</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mo = <span class="number">9999973</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">105</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> f[maxn][maxn][maxn], n, m;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">X</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">1l</span>l * x * (x - <span class="number">1</span>) / <span class="number">2</span> % mo;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;m);</span><br><span class="line">	f[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= m; j++)</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; j + k &lt;= m; k++)&#123;</span><br><span class="line">				f[i][j][k] = f[i - <span class="number">1</span>][j][k];</span><br><span class="line">				<span class="keyword">if</span> (k &gt; <span class="number">0</span>) f[i][j][k] = (f[i][j][k] + <span class="number">1l</span>l * f[i - <span class="number">1</span>][j + <span class="number">1</span>][k - <span class="number">1</span>] * (j + <span class="number">1</span>) % mo) % mo;</span><br><span class="line">				<span class="keyword">if</span> (j &gt; <span class="number">0</span>) f[i][j][k] = (f[i][j][k] + <span class="number">1l</span>l * f[i - <span class="number">1</span>][j - <span class="number">1</span>][k] * (m - j - k + <span class="number">1</span>) % mo) % mo;</span><br><span class="line">				<span class="keyword">if</span> (k &gt; <span class="number">1</span>) f[i][j][k] = (f[i][j][k] + <span class="number">1l</span>l * f[i - <span class="number">1</span>][j + <span class="number">2</span>][k - <span class="number">2</span>] * X(j + <span class="number">2</span>) % mo) % mo;</span><br><span class="line">				<span class="keyword">if</span> (k &gt; <span class="number">0</span>) f[i][j][k] = (f[i][j][k] + <span class="number">1l</span>l * f[i - <span class="number">1</span>][j][k - <span class="number">1</span>] * j % mo * (m - j - k + <span class="number">1</span>) % mo) % mo;</span><br><span class="line">				<span class="keyword">if</span> (j &gt; <span class="number">1</span>) f[i][j][k] = (f[i][j][k] + <span class="number">1l</span>l * f[i - <span class="number">1</span>][j - <span class="number">2</span>][k] * X(m - j - k + <span class="number">2</span>) % mo) % mo;</span><br><span class="line">			&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= m; j++)</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; j + k &lt;= m; k++)</span><br><span class="line">			ans = (ans + f[n][j][k]) % mo;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
                 
             </div>
