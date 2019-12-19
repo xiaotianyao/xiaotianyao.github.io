@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>[CF1238E]Keyboard Purchase</title>
+    <url>/2019/12/19/%5BCF1238E%5DKeyboard%20Purchase/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>给定包含m种字符的字符串，找到一种键盘，使它是m个字符的一种排列</p>
+<p>打完这段字符串，会在键盘上移动一些距离，求距离最小值</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>这道题不能用传统方式去看，因为前面字符的排列方式会影响后面的Dp，不得不退化到n!</p>
+<p>最好的情况是令这m个字符在键盘上距离皆为1，令$f_S$为当前已经确定S中的字符</p>
+<p>显然若一个字符已经确定，而另一个没有确认且没有在这次被确认，它们之间的距离会+1</p>
+<p>得到转移</p>
+<script type="math/tex; mode=display">
+f_S=min\{f_{S-\{i\}}+c\}</script><h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>无</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> f[<span class="number">1</span> &lt;&lt; <span class="number">20</span>], n, m, c[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"><span class="keyword">char</span> str[(<span class="keyword">int</span>)<span class="number">1e5</span>];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d%s"</span>, &amp;n, &amp;m, str);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) c[str[i] - <span class="string">'a'</span>][str[i + <span class="number">1</span>] - <span class="string">'a'</span>]++, c[str[i + <span class="number">1</span>] - <span class="string">'a'</span>][str[i] - <span class="string">'a'</span>]++;</span><br><span class="line">	<span class="built_in">memset</span>(f, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> f); f[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; (<span class="number">1</span> &lt;&lt; m); i++)&#123;</span><br><span class="line">		<span class="keyword">int</span> t = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++)</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> k = j + <span class="number">1</span>; k &lt; m; k++)</span><br><span class="line">				<span class="keyword">if</span> ((i &gt;&gt; j &amp; <span class="number">1</span>) ^ (i &gt;&gt; k &amp; <span class="number">1</span>)) t += c[j][k];</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++)</span><br><span class="line">			<span class="keyword">if</span> (i &gt;&gt; j &amp; <span class="number">1</span>) f[i] = min(f[i], f[i ^ (<span class="number">1</span> &lt;&lt; j)] + t);</span><br><span class="line">	&#125; <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, f[(<span class="number">1</span> &lt;&lt; m) - <span class="number">1</span>]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>动态规划Dp</tag>
+        <tag>idea</tag>
+        <tag>状态压缩</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[ARC073F]Many Moves</title>
     <url>/2019/12/19/%5BARC073F%5DMany%20Moves/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>在编号为1~n的n个格子上有2个棋子，初始时在A和B</p>
@@ -305,8 +323,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>JOI</category>
       </categories>
       <tags>
-        <tag>状态缩减</tag>
         <tag>线段树</tag>
+        <tag>状态缩减</tag>
         <tag>扫描线</tag>
         <tag>单调栈</tag>
       </tags>
