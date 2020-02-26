@@ -483,8 +483,8 @@
       </categories>
       <tags>
         <tag>网络流</tag>
-        <tag>最大流</tag>
         <tag>构造</tag>
+        <tag>最大流</tag>
       </tags>
   </entry>
   <entry>
@@ -1471,8 +1471,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
       <tags>
         <tag>图论</tag>
         <tag>调试很久</tag>
-        <tag>二分图</tag>
         <tag>网络流</tag>
+        <tag>二分图</tag>
         <tag>构造</tag>
       </tags>
   </entry>
