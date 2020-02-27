@@ -213,9 +213,9 @@
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>idea</tag>
         <tag>博弈论</tag>
         <tag>杨氏图</tag>
+        <tag>idea</tag>
       </tags>
   </entry>
   <entry>
@@ -234,8 +234,8 @@
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>二分答案</tag>
         <tag>idea</tag>
+        <tag>二分答案</tag>
         <tag>整体二分</tag>
         <tag>图论</tag>
       </tags>
@@ -342,23 +342,6 @@
         <tag>idea</tag>
         <tag>动态规划Dp</tag>
         <tag>前缀和</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[ARC064F]Rotated Palindromes</title>
-    <url>/2020/02/07/%5BARC064F%5DRotated%20Palindromes/</url>
-    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>求所有每位的数字为$1~k$，长度为$n$的回文串，任意次将第一个数字放到最后一个所形成的不同的序列数量</p>
-<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>先考虑循环节，如果循环节长度为奇数，那么贡献为$len$</p>
-<p>如果长度为偶数，那么贡献为$(len/2)$</p>
-<p>令$f_i$为最小循环节长度为$i$的数量，dp即可</p>
-<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>1ll</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mo = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pow</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> t)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (t &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span> (t &amp; <span class="number">1</span>) res = <span class="number">1l</span>l * res * x % mo;</span><br><span class="line">		x = <span class="number">1l</span>l * x * x % mo;</span><br><span class="line">		t &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n, k, dp[<span class="number">10001</span>]; <span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; p;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;k);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i * i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (n % i == <span class="number">0</span>)&#123;</span><br><span class="line">			p.push_back(i);</span><br><span class="line">			<span class="keyword">if</span> (i * i != n) p.push_back(n / i);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	sort(p.begin(), p.end()); <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; p.size(); i++)&#123;</span><br><span class="line">		dp[i] = <span class="built_in">pow</span>(k, (p[i] + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++)</span><br><span class="line">			<span class="keyword">if</span> (p[i] % p[j] == <span class="number">0</span>) dp[i] = (dp[i] - dp[j] + mo) % mo;</span><br><span class="line">		ans = (ans + <span class="number">1l</span>l * dp[i] * (p[i] / (<span class="number">1</span> + (p[i] % <span class="number">2</span> == <span class="number">0</span>))) % mo) % mo;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Atcoder</category>
-      </categories>
-      <tags>
-        <tag>动态规划Dp</tag>
-        <tag>线性筛</tag>
       </tags>
   </entry>
   <entry>
@@ -512,8 +495,8 @@
       </categories>
       <tags>
         <tag>网络流</tag>
-        <tag>构造</tag>
         <tag>最大流</tag>
+        <tag>构造</tag>
       </tags>
   </entry>
   <entry>
@@ -534,8 +517,8 @@
         <category>网络流24题</category>
       </categories>
       <tags>
-        <tag>状态压缩</tag>
         <tag>最短路</tag>
+        <tag>状态压缩</tag>
       </tags>
   </entry>
   <entry>
@@ -1517,6 +1500,23 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
       </categories>
       <tags>
         <tag>二分图</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[ARC064F]Rotated Palindromes</title>
+    <url>/2019/11/05/%5BARC064F%5DRotated%20Palindromes/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>求所有每位的数字为$1~k$，长度为$n$的回文串，任意次将第一个数字放到最后一个所形成的不同的序列数量</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>先考虑循环节，如果循环节长度为奇数，那么贡献为$len$</p>
+<p>如果长度为偶数，那么贡献为$(len/2)$</p>
+<p>令$f_i$为最小循环节长度为$i$的数量，dp即可</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>1ll</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mo = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pow</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> t)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (t &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span> (t &amp; <span class="number">1</span>) res = <span class="number">1l</span>l * res * x % mo;</span><br><span class="line">		x = <span class="number">1l</span>l * x * x % mo;</span><br><span class="line">		t &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n, k, dp[<span class="number">10001</span>]; <span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; p;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;k);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i * i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (n % i == <span class="number">0</span>)&#123;</span><br><span class="line">			p.push_back(i);</span><br><span class="line">			<span class="keyword">if</span> (i * i != n) p.push_back(n / i);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	sort(p.begin(), p.end()); <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; p.size(); i++)&#123;</span><br><span class="line">		dp[i] = <span class="built_in">pow</span>(k, (p[i] + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++)</span><br><span class="line">			<span class="keyword">if</span> (p[i] % p[j] == <span class="number">0</span>) dp[i] = (dp[i] - dp[j] + mo) % mo;</span><br><span class="line">		ans = (ans + <span class="number">1l</span>l * dp[i] * (p[i] / (<span class="number">1</span> + (p[i] % <span class="number">2</span> == <span class="number">0</span>))) % mo) % mo;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Atcoder</category>
+      </categories>
+      <tags>
+        <tag>动态规划Dp</tag>
+        <tag>线性筛</tag>
       </tags>
   </entry>
   <entry>
