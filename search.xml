@@ -39,9 +39,21 @@
       </categories>
   </entry>
   <entry>
-    <title>test</title>
-    <url>/2020/02/26/test/</url>
-    <content><![CDATA[<h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3>]]></content>
+    <title>[ARC064E]Cosmic Rays</title>
+    <url>/2020/02/27/%5BARC064E%5DCosmic%20Rays/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>平面上有$n$个圆，从一点到另一点，求不再圆内的最小距离</p>
+<p>$n\leq 1000$</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>两点间距离视为圆心距减半径，最短路即可</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>输出位数太小</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1005</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">max</span><span class="params">(<span class="keyword">double</span> a, <span class="keyword">double</span> b)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (a &gt; b) <span class="keyword">return</span> a;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n; <span class="keyword">double</span> x[maxn], y[maxn], r[maxn];</span><br><span class="line">priority_queue &lt;pair&lt;<span class="keyword">double</span>, <span class="keyword">int</span>&gt; &gt; q;</span><br><span class="line"><span class="keyword">double</span> dis[maxn];</span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">D</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> d = <span class="built_in">sqrt</span>((x[a] - x[b]) * (x[a] - x[b]) + (y[a] - y[b]) * (y[a] - y[b]));</span><br><span class="line">	<span class="keyword">return</span> max(<span class="number">0</span>, d - r[a] - r[b]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">bool</span> vis[maxn];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(<span class="keyword">int</span> S)</span></span>&#123;</span><br><span class="line">	q.push(make_pair(<span class="number">0</span>, S)); <span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span> vis);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n + <span class="number">1</span>; i++) dis[i] = <span class="number">0x3f3f3f3f3f3f</span>; dis[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span> (!q.empty())&#123;</span><br><span class="line">		<span class="keyword">int</span> cur = q.top().second; q.pop();</span><br><span class="line">		<span class="keyword">if</span> (vis[cur]) <span class="keyword">continue</span>; vis[cur] = <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n + <span class="number">1</span>; i++)&#123;</span><br><span class="line">			<span class="keyword">if</span> (i != cur &amp;&amp; dis[i] &gt; dis[cur] + D(cur, i))&#123;</span><br><span class="line">				dis[i] = dis[cur] + D(cur, i);</span><br><span class="line">				<span class="keyword">if</span> (!vis[i])</span><br><span class="line">					q.push(make_pair(-dis[i], i));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%lf%lf%lf%lf"</span>, x, y, x + <span class="number">1</span>, y + <span class="number">1</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%lf%lf%lf"</span>, x + i + <span class="number">1</span>, y + i + <span class="number">1</span>, r + i + <span class="number">1</span>);</span><br><span class="line">	Dijkstra(<span class="number">0</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%.10lf\n"</span>, dis[<span class="number">1</span>]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Atcoder</category>
+      </categories>
+      <tags>
+        <tag>图论</tag>
+        <tag>最短路</tag>
+      </tags>
   </entry>
   <entry>
     <title>[SOJ840]小γ的使命</title>
@@ -139,9 +151,9 @@
         <category>模板</category>
       </categories>
       <tags>
-        <tag>模板</tag>
         <tag>可持久化</tag>
         <tag>Trie</tag>
+        <tag>模板</tag>
       </tags>
   </entry>
   <entry>
@@ -333,6 +345,23 @@
       </tags>
   </entry>
   <entry>
+    <title>[ARC064F]Rotated Palindromes</title>
+    <url>/2020/02/07/%5BARC064F%5DRotated%20Palindromes/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>求所有每位的数字为$1~k$，长度为$n$的回文串，任意次将第一个数字放到最后一个所形成的不同的序列数量</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>先考虑循环节，如果循环节长度为奇数，那么贡献为$len$</p>
+<p>如果长度为偶数，那么贡献为$(len/2)$</p>
+<p>令$f_i$为最小循环节长度为$i$的数量，dp即可</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>1ll</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mo = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pow</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> t)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (t &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span> (t &amp; <span class="number">1</span>) res = <span class="number">1l</span>l * res * x % mo;</span><br><span class="line">		x = <span class="number">1l</span>l * x * x % mo;</span><br><span class="line">		t &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n, k, dp[<span class="number">10001</span>]; <span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; p;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;k);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i * i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (n % i == <span class="number">0</span>)&#123;</span><br><span class="line">			p.push_back(i);</span><br><span class="line">			<span class="keyword">if</span> (i * i != n) p.push_back(n / i);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	sort(p.begin(), p.end()); <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; p.size(); i++)&#123;</span><br><span class="line">		dp[i] = <span class="built_in">pow</span>(k, (p[i] + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++)</span><br><span class="line">			<span class="keyword">if</span> (p[i] % p[j] == <span class="number">0</span>) dp[i] = (dp[i] - dp[j] + mo) % mo;</span><br><span class="line">		ans = (ans + <span class="number">1l</span>l * dp[i] * (p[i] / (<span class="number">1</span> + (p[i] % <span class="number">2</span> == <span class="number">0</span>))) % mo) % mo;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Atcoder</category>
+      </categories>
+      <tags>
+        <tag>动态规划Dp</tag>
+        <tag>线性筛</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[AGC004D]Teleporter</title>
     <url>/2020/02/05/%5BAGC004D%5DTeleporter/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>每个点有一条出边，保证所有点都能到1</p>
@@ -483,8 +512,8 @@
       </categories>
       <tags>
         <tag>网络流</tag>
-        <tag>最大流</tag>
         <tag>构造</tag>
+        <tag>最大流</tag>
       </tags>
   </entry>
   <entry>

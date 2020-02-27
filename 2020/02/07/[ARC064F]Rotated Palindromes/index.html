@@ -13,7 +13,12 @@
     
 
     
-        <meta name="description" content="test"/>
+        <meta name="description" content="题意求所有每位的数字为$1~k$，长度为$n$的回文串，任意次将第一个数字放到最后一个所形成的不同的序列数量
+题解先考虑循环节，如果循环节长度为奇数，那么贡献为$len$
+如果长度为偶数，那么贡献为$(len/2)$
+令$f_i$为最小循环节长度为$i$的数量，dp即可
+调试记录1ll
+123456"/>
     
 
     <!--Author-->
@@ -23,12 +28,17 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="test"/>
+        <meta property="og:title" content="[ARC064F]Rotated Palindromes"/>
     
 
     <!--Open Graph Description-->
     
-        <meta property="og:description" content="test"/>
+        <meta property="og:description" content="题意求所有每位的数字为$1~k$，长度为$n$的回文串，任意次将第一个数字放到最后一个所形成的不同的序列数量
+题解先考虑循环节，如果循环节长度为奇数，那么贡献为$len$
+如果长度为偶数，那么贡献为$(len/2)$
+令$f_i$为最小循环节长度为$i$的数量，dp即可
+调试记录1ll
+123456"/>
     
 
     <!--Open Graph Site Name-->
@@ -55,7 +65,7 @@
 
     <!-- Title -->
     
-    <title>test - XiaoTianyao&#39;s Blog</title>
+    <title>[ARC064F]Rotated Palindromes - XiaoTianyao&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -160,18 +170,18 @@
     <!-- Page Header -->
 <!-- Set your background image for this header in your post front-matter: cover -->
 
-<header class="intro-header" style="background-image: url('/img/ship-on-lake.jpg')">
+<header class="intro-header" style="background-image: url('/img/ship-on-lake2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
-                    <h1>test</h1>
+                    <h1>[ARC064F]Rotated Palindromes</h1>
                     
                     <span class="meta">
                         <!-- Date and Author -->
                         
                         
-                            2020-02-26
+                            2020-02-07
                         
                     </span>
                 </div>
@@ -187,13 +197,37 @@
 
             <!-- Tags and categories -->
            
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/动态规划Dp/">#动态规划Dp</a> <a href="/tags/线性筛/">#线性筛</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/Atcoder/">Atcoder</a>
+
+                    
+                </div>
+            
 
             <!-- Gallery -->
             
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3>
+                <h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>求所有每位的数字为$1~k$，长度为$n$的回文串，任意次将第一个数字放到最后一个所形成的不同的序列数量</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>先考虑循环节，如果循环节长度为奇数，那么贡献为$len$</p>
+<p>如果长度为偶数，那么贡献为$(len/2)$</p>
+<p>令$f_i$为最小循环节长度为$i$的数量，dp即可</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>1ll</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mo = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pow</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> t)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (t &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span> (t &amp; <span class="number">1</span>) res = <span class="number">1l</span>l * res * x % mo;</span><br><span class="line">		x = <span class="number">1l</span>l * x * x % mo;</span><br><span class="line">		t &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n, k, dp[<span class="number">10001</span>]; <span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; p;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;k);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i * i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (n % i == <span class="number">0</span>)&#123;</span><br><span class="line">			p.push_back(i);</span><br><span class="line">			<span class="keyword">if</span> (i * i != n) p.push_back(n / i);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	sort(p.begin(), p.end()); <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; p.size(); i++)&#123;</span><br><span class="line">		dp[i] = <span class="built_in">pow</span>(k, (p[i] + <span class="number">1</span>) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++)</span><br><span class="line">			<span class="keyword">if</span> (p[i] % p[j] == <span class="number">0</span>) dp[i] = (dp[i] - dp[j] + mo) % mo;</span><br><span class="line">		ans = (ans + <span class="number">1l</span>l * dp[i] * (p[i] / (<span class="number">1</span> + (p[i] % <span class="number">2</span> == <span class="number">0</span>))) % mo) % mo;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
                 
             </div>
