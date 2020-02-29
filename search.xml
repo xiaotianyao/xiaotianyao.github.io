@@ -39,8 +39,8 @@
       </categories>
   </entry>
   <entry>
-    <title>[ARC065f]Shuffling</title>
-    <url>/2020/02/29/%5BARC065f%5DShuffling/</url>
+    <title>[ARC065F]Shuffling</title>
+    <url>/2020/02/29/%5BARC065F%5DShuffling/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>长度为$n$的01串，共$m$次可以任意排列$[l_i,r_i]$之间的子串</p>
 <p>问最终的不同串个数</p>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>令$f_{i,j}$表示前i个已经确定，还有j个1要安排</p>
@@ -535,8 +535,8 @@
       </categories>
       <tags>
         <tag>网络流</tag>
-        <tag>构造</tag>
         <tag>最大流</tag>
+        <tag>构造</tag>
       </tags>
   </entry>
   <entry>
@@ -1116,8 +1116,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -1398,8 +1398,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
         <tag>递归</tag>
         <tag>调试很久</tag>
       </tags>
