@@ -13,10 +13,12 @@
     
 
     
-        <meta name="description" content="题意给出一棵权值为01的树，找到一个拓扑序列，使得权值序列中逆序对对数最少
-求最小值
-题解考虑两个拓扑序的合并，令$a_1,b_1,a_2,b_2$分别为序列1,2中01的个数
-当$b_1\cdot a_2\leq a_1\cdot b_2$即$\frac{b_1}{a_1}\leq\frac{b_"/>
+        <meta name="description" content="题意长度为$n$的01串，共$m$次可以任意排列$[l_i,r_i]$之间的子串
+问最终的不同串个数
+题解令$f_{i,j}$表示前i个已经确定，还有j个1要安排
+转移考虑下一位放0/1，注意条件
+调试记录可以安排的1的个数可能大于i
+12345678910111213141516171819202"/>
     
 
     <!--Author-->
@@ -26,15 +28,17 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="[AGC023F]01 on tree"/>
+        <meta property="og:title" content="[ARC065f]Shuffling"/>
     
 
     <!--Open Graph Description-->
     
-        <meta property="og:description" content="题意给出一棵权值为01的树，找到一个拓扑序列，使得权值序列中逆序对对数最少
-求最小值
-题解考虑两个拓扑序的合并，令$a_1,b_1,a_2,b_2$分别为序列1,2中01的个数
-当$b_1\cdot a_2\leq a_1\cdot b_2$即$\frac{b_1}{a_1}\leq\frac{b_"/>
+        <meta property="og:description" content="题意长度为$n$的01串，共$m$次可以任意排列$[l_i,r_i]$之间的子串
+问最终的不同串个数
+题解令$f_{i,j}$表示前i个已经确定，还有j个1要安排
+转移考虑下一位放0/1，注意条件
+调试记录可以安排的1的个数可能大于i
+12345678910111213141516171819202"/>
     
 
     <!--Open Graph Site Name-->
@@ -61,7 +65,7 @@
 
     <!-- Title -->
     
-    <title>[AGC023F]01 on tree - XiaoTianyao&#39;s Blog</title>
+    <title>[ARC065f]Shuffling - XiaoTianyao&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -166,18 +170,18 @@
     <!-- Page Header -->
 <!-- Set your background image for this header in your post front-matter: cover -->
 
-<header class="intro-header" style="background-image: url('/img/faroe-island.jpg')">
+<header class="intro-header" style="background-image: url('/img/rain2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
-                    <h1>[AGC023F]01 on tree</h1>
+                    <h1>[ARC065f]Shuffling</h1>
                     
                     <span class="meta">
                         <!-- Date and Author -->
                         
                         
-                            2019-12-06
+                            2020-02-29
                         
                     </span>
                 </div>
@@ -198,7 +202,7 @@
                         
 
 
-<a href="/tags/树/">#树</a> <a href="/tags/贪心/">#贪心</a>
+<a href="/tags/动态规划Dp/">#动态规划Dp</a>
 
 
                     
@@ -218,14 +222,13 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>给出一棵权值为01的树，找到一个拓扑序列，使得权值序列中逆序对对数最少</p>
-<p>求最小值</p>
-<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>考虑两个拓扑序的合并，令$a_1,b_1,a_2,b_2$分别为序列1,2中01的个数</p>
-<p>当$b_1\cdot a_2\leq a_1\cdot b_2$即$\frac{b_1}{a_1}\leq\frac{b_2}{a_2}$时，序列1在前面更优</p>
-<p>满足排序性质，用堆维护</p>
-<p>每次找最小的序列和父亲的序列合并一定最优，局部最优必定导致全局最优</p>
-<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>1不能再合并，不要加进去</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LL long long</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">2e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> f[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getf</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;<span class="keyword">return</span> x == f[x] ? x : f[x] = getf(f[x]);&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> a, b, id;</span><br><span class="line">	<span class="keyword">bool</span> <span class="keyword">operator</span>&lt;(A x)<span class="keyword">const</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1l</span>l * b * x.a &gt; <span class="number">1l</span>l * a * x.b;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">bool</span> <span class="keyword">operator</span>!=(A x)<span class="keyword">const</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> a != x.a || b != x.b;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;a[maxn]; LL ans = <span class="number">0</span>;</span><br><span class="line">priority_queue &lt;A&gt; q;</span><br><span class="line"><span class="keyword">int</span> n, anc[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">"%d"</span>, anc + i);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> val, i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;val);</span><br><span class="line">		f[i] = i;</span><br><span class="line">		<span class="keyword">if</span> (val == <span class="number">0</span>) a[i] = (A)&#123;<span class="number">1</span>, <span class="number">0</span>, i&#125;;</span><br><span class="line">		<span class="keyword">else</span> a[i] = (A)&#123;<span class="number">0</span>, <span class="number">1</span>, i&#125;;</span><br><span class="line">		<span class="keyword">if</span> (i != <span class="number">1</span>) q.push(a[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (!q.empty())&#123;</span><br><span class="line">		A t = q.top(); q.pop();</span><br><span class="line">		<span class="keyword">int</span> cur = getf(t.id);</span><br><span class="line">		<span class="keyword">if</span> (a[cur] != t) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="keyword">int</span> fa = getf(anc[cur]);</span><br><span class="line">		ans += <span class="number">1l</span>l * a[fa].b * a[cur].a;</span><br><span class="line">		a[fa].a += a[cur].a;</span><br><span class="line">		a[fa].b += a[cur].b;</span><br><span class="line">		f[getf(cur)] = f[getf(fa)];</span><br><span class="line">		<span class="keyword">if</span> (fa != <span class="number">1</span>) q.push(a[fa]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+                <h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>长度为$n$的01串，共$m$次可以任意排列$[l_i,r_i]$之间的子串</p>
+<p>问最终的不同串个数</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>令$f_{i,j}$表示前i个已经确定，还有j个1要安排</p>
+<p>转移考虑下一位放0/1，注意条件</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>可以安排的1的个数可能大于i</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">3005</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mo = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> f[<span class="number">2</span>][maxn], s[maxn], Max[maxn];</span><br><span class="line"><span class="keyword">int</span> n, m;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;m); getchar();</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) s[i] = s[i - <span class="number">1</span>] + getchar() - <span class="string">'0'</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> l, r, i = <span class="number">1</span>; i &lt;= m; i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;l, &amp;r);</span><br><span class="line">		Max[l] = max(Max[l], r);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) Max[i] = max(i, max(Max[i], Max[i - <span class="number">1</span>]));</span><br><span class="line">	f[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>; <span class="keyword">int</span> T = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; T ^= <span class="number">1</span>, i++)&#123;</span><br><span class="line">		<span class="built_in">memset</span>(f[T], <span class="number">0</span>, <span class="keyword">sizeof</span> f[T]);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= n; j++)&#123;</span><br><span class="line">			<span class="keyword">if</span> (j + s[Max[i]] - s[Max[i - <span class="number">1</span>]] &gt; <span class="number">0</span>) (f[T][j - <span class="number">1</span> + s[Max[i]] - s[Max[i - <span class="number">1</span>]]] += f[T ^ <span class="number">1</span>][j]) %= mo;</span><br><span class="line">			<span class="keyword">if</span> (j + s[Max[i]] - s[Max[i - <span class="number">1</span>]] &lt; Max[i] - (i - <span class="number">1</span>)) (f[T][j + s[Max[i]] - s[Max[i - <span class="number">1</span>]]] += f[T ^ <span class="number">1</span>][j]) %= mo;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, f[T ^ <span class="number">1</span>][<span class="number">0</span>]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
                 
             </div>
