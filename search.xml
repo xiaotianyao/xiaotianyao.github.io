@@ -39,6 +39,46 @@
       </categories>
   </entry>
   <entry>
+    <title>[HNOI2008]Cards</title>
+    <url>/2020/03/02/%5BHNOI2008%5DCards/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>求出将长度为$n$的序列染成$A，B，C$个红、蓝、绿色的本质不同方案</p>
+<p>$m$个置换给出，$n\leq 60,A,B,C\leq20,m\leq60$</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入数据保证任意多次洗牌都可用这m种洗牌法中的一种代替，且对每种洗牌法，都存在一种洗牌法使得能回到原状态。</span><br></pre></td></tr></table></figure>
+<p><del>我也不知道保证这个有什么用</del></p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>由于颜色数量有限制，不能用Polya</p>
+<p>可以用Burnside，对于每个置换求出不动点个数，可以发现一个循环节内颜色一定相同，Dp即可</p>
+<p>最后不要忘了幺元，除$m+1$就是答案</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>好像以为$n\leq 20$？</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LL long long</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n, A, B, C, m, p[<span class="number">65</span>];</span><br><span class="line">LL mo, f[<span class="number">65</span>][<span class="number">65</span>][<span class="number">65</span>];</span><br><span class="line"><span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; sz;</span><br><span class="line"><span class="function">LL <span class="title">calc</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">bool</span> vis[<span class="number">65</span>]; <span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span> vis);</span><br><span class="line">	sz.clear();</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (vis[i]) <span class="keyword">continue</span>;</span><br><span class="line">		<span class="keyword">int</span> cur = i, t = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">while</span> (!vis[cur])&#123;</span><br><span class="line">			vis[cur] = <span class="number">1</span>;</span><br><span class="line">			++t;</span><br><span class="line">			cur = p[cur];</span><br><span class="line">		&#125; sz.push_back(t);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">memset</span>(f, <span class="number">0</span>, <span class="keyword">sizeof</span> f); f[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; sz.size(); i++)&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> a = A; a &gt;= <span class="number">0</span>; a--)</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> b = B; b &gt;= <span class="number">0</span>; b--)</span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> c = C; c &gt;= <span class="number">0</span>; c--)&#123;</span><br><span class="line">					<span class="keyword">if</span> (A - a &gt;= sz[i]) f[a + sz[i]][b][c] = (f[a + sz[i]][b][c] + f[a][b][c]) % mo;</span><br><span class="line">					<span class="keyword">if</span> (B - b &gt;= sz[i]) f[a][b + sz[i]][c] = (f[a][b + sz[i]][c] + f[a][b][c]) % mo;</span><br><span class="line">					<span class="keyword">if</span> (C - c &gt;= sz[i]) f[a][b][c + sz[c]] = (f[a][b][c + sz[c]] + f[a][b][c]) % mo;</span><br><span class="line">				&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> f[A][B][C];</span><br><span class="line">&#125; LL ans = <span class="number">0</span>;</span><br><span class="line"><span class="function">LL <span class="title">pow</span><span class="params">(LL x, LL t)</span></span>&#123;</span><br><span class="line">	LL res = <span class="number">1</span>; x %= mo;</span><br><span class="line">	<span class="keyword">while</span> (t &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span> (t &amp; <span class="number">1</span>) res = res * x % mo;</span><br><span class="line">		x = x * x % mo;</span><br><span class="line">		t &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d%d%d%lld"</span>, &amp;A, &amp;B, &amp;C, &amp;m, &amp;mo); n = A + B + C;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++)&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)</span><br><span class="line">			<span class="built_in">scanf</span>(<span class="string">"%d"</span>, p + j);</span><br><span class="line">		ans = (ans + calc()) % mo;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++) p[j] = j; ans = (ans + calc()) % mo;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans * <span class="built_in">pow</span>(m + <span class="number">1</span>, mo - <span class="number">2</span>) % mo);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>HNOI</category>
+      </categories>
+      <tags>
+        <tag>组合数学</tag>
+        <tag>动态规划Dp</tag>
+        <tag>Polya计数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[ZJOI2006]物流运输</title>
+    <url>/2020/03/02/%5BZJOI2006%5D%E7%89%A9%E6%B5%81%E8%BF%90%E8%BE%93/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>共$n$天运输，每天可能封掉一些点，每次更改路线要$K$的代价，单位长度的运输要1的代价</p>
+<p>求最小代价，$n\leq 100，|E|\leq 20$</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>对于天数进行Dp，转移的时候求出第i+1~j天都可行的最短路即可</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>边的数组开小了(maxn&lt;&lt;1)</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">105</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">E</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> to, nxt, l;</span><br><span class="line">&#125;e[maxn * maxn &lt;&lt; <span class="number">1</span>];</span><br><span class="line"><span class="keyword">int</span> head[maxn], tot = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v, <span class="keyword">int</span> l)</span></span>&#123;</span><br><span class="line">	e[++tot].to = v, e[tot].nxt = head[u], e[tot].l = l;</span><br><span class="line">	head[u] = tot;</span><br><span class="line">&#125;</span><br><span class="line">priority_queue &lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; &gt; q;</span><br><span class="line"><span class="keyword">int</span> dis[maxn]; <span class="keyword">bool</span> vis[maxn];</span><br><span class="line"><span class="keyword">int</span> D, K, Q, n, m;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">()</span></span>&#123;</span><br><span class="line">	q.push(make_pair(<span class="number">0</span>, <span class="number">1</span>));</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) dis[i] = INF; dis[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span> (!q.empty())&#123;</span><br><span class="line">		<span class="keyword">int</span> cur = q.top().second; q.pop();</span><br><span class="line">		<span class="keyword">if</span> (vis[cur]) <span class="keyword">continue</span>; vis[cur] = <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = head[cur]; i; i = e[i].nxt)&#123;</span><br><span class="line">			<span class="keyword">int</span> v = e[i].to;</span><br><span class="line">			<span class="keyword">if</span> (dis[v] &gt; dis[cur] + e[i].l)&#123;</span><br><span class="line">				dis[v] = dis[cur] + e[i].l;</span><br><span class="line">				q.push(make_pair(-dis[v], v));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> f[maxn][maxn];</span><br><span class="line"><span class="keyword">int</span> dp[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d%d%d"</span>, &amp;D, &amp;n, &amp;K, &amp;m);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> u, v, l, i = <span class="number">1</span>; i &lt;= m; i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>, &amp;u, &amp;v, &amp;l);</span><br><span class="line">		addedge(u, v, l); addedge(v, u, l);</span><br><span class="line">	&#125; <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;Q);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> p, l, r, i = <span class="number">1</span>; i &lt;= Q; i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>, &amp;p, &amp;l, &amp;r);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = l; j &lt;= r; j++) f[p][j] = <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= D; j++)</span><br><span class="line">			f[i][j] += f[i][j - <span class="number">1</span>];</span><br><span class="line">	<span class="built_in">memset</span>(dp, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> dp); dp[<span class="number">0</span>] = -K;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= D; i++)&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++)&#123;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= n; k++)</span><br><span class="line">				vis[k] = f[k][i] - f[k][j];</span><br><span class="line">			Dijkstra();</span><br><span class="line">			<span class="keyword">if</span> (dis[n] == INF) <span class="keyword">continue</span>;</span><br><span class="line">			dp[i] = min(dp[i], dp[j] + K + dis[n] * (i - j));</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, dp[D]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ZJOI</category>
+      </categories>
+      <tags>
+        <tag>图论</tag>
+        <tag>动态规划Dp</tag>
+        <tag>最短路</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[BZOJ1001]狼抓兔子</title>
     <url>/2020/03/01/%5BBZOJ1001%5D%E7%8B%BC%E6%8A%93%E5%85%94%E5%AD%90/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>问下图的最小割，S左上，T右下，$n,m\leq 1000$</p>
@@ -273,9 +313,9 @@
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>idea</tag>
         <tag>博弈论</tag>
         <tag>杨氏图</tag>
+        <tag>idea</tag>
       </tags>
   </entry>
   <entry>
@@ -294,8 +334,8 @@
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>二分答案</tag>
         <tag>idea</tag>
+        <tag>二分答案</tag>
         <tag>整体二分</tag>
         <tag>图论</tag>
       </tags>
@@ -555,8 +595,8 @@
       </categories>
       <tags>
         <tag>网络流</tag>
-        <tag>最大流</tag>
         <tag>构造</tag>
+        <tag>最大流</tag>
       </tags>
   </entry>
   <entry>
@@ -1543,8 +1583,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
       <tags>
         <tag>图论</tag>
         <tag>调试很久</tag>
-        <tag>网络流</tag>
         <tag>二分图</tag>
+        <tag>网络流</tag>
         <tag>构造</tag>
       </tags>
   </entry>
