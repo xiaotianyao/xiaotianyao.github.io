@@ -39,6 +39,46 @@
       </categories>
   </entry>
   <entry>
+    <title>[CF364D]Ghd</title>
+    <url>/2020/03/06/%5BCF364D%5DGhd/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>在$\{a_i\}$中，选出至少$\frac{(n+1)}{2}$个数，使得它们的gcd最大，输出最大值</p>
+<p>$n\leq 10^6，a_i\leq 10^{12}$</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>如果假定某个数在答案中，统计每个因数在它与所有数中出现的次数，从大到小遍历就能确定这种情况下的最优解</p>
+<p>统计因数的时候，为了保证效率，可以先只统计gcd本身，然后再统计gcd的因子</p>
+<p>由于选出的数超过一半，故每个数在答案中的概率为$\frac{1}{2}$，跑10次就差不多了$\color{Orange}{看脸过题？}$</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>vector没有用long long</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LL long long</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e6</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line">LL a[maxn]; <span class="keyword">int</span> n;</span><br><span class="line"><span class="built_in">vector</span> &lt;LL&gt; v;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">split</span><span class="params">(LL x)</span></span>&#123;</span><br><span class="line">	v.clear();</span><br><span class="line">	<span class="keyword">for</span> (LL i = <span class="number">1</span>; i * i &lt;= x; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (x % i != <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">		v.push_back(i);</span><br><span class="line">		<span class="keyword">if</span> (i * i != x) v.push_back(x / i);</span><br><span class="line">	&#125; sort(v.begin(), v.end());</span><br><span class="line">&#125;</span><br><span class="line">LL _gcd(LL x, LL y)&#123;</span><br><span class="line">	<span class="keyword">return</span> (!y) ? x : _gcd(y, x % y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> cnt[<span class="number">10005</span>]; LL ans = <span class="number">0</span>;</span><br><span class="line"><span class="function">LL <span class="title">max</span><span class="params">(LL x, LL y)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x &lt; y ? y : x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">"%lld"</span>, a + i);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> T = <span class="number">0</span>; T &lt; <span class="number">10</span>; T++)&#123;</span><br><span class="line">		<span class="keyword">int</span> u = rand() * rand() % n + <span class="number">1</span>;</span><br><span class="line">		split(a[u]); <span class="built_in">memset</span>(cnt, <span class="number">0</span>, <span class="keyword">sizeof</span> cnt);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">			LL g = _gcd(a[i], a[u]);</span><br><span class="line">			<span class="built_in">vector</span>&lt;LL&gt;::iterator it = lower_bound(v.begin(), v.end(), g);</span><br><span class="line">			<span class="keyword">if</span> (it == v.end()) <span class="keyword">continue</span>;</span><br><span class="line">			cnt[it - v.begin()]++;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; v.size(); i++)</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; v.size(); j++)</span><br><span class="line">				<span class="keyword">if</span> (v[j] % v[i] == <span class="number">0</span>) cnt[i] += cnt[j];</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = v.size() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line">			<span class="keyword">if</span> (cnt[i] &gt;= (n + <span class="number">1</span>) / <span class="number">2</span>)&#123;</span><br><span class="line">				ans = max(ans, v[i]);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Codeforces</category>
+      </categories>
+      <tags>
+        <tag>数论</tag>
+        <tag>随机化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[lg1742]最小圆覆盖</title>
+    <url>/2020/03/06/%5Blg1742%5D%E6%9C%80%E5%B0%8F%E5%9C%86%E8%A6%86%E7%9B%96/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>求平面内覆盖所有点的最小圆</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>3点确定一个圆，设3点为$A(x_1,y_1),B(x_2,y_2),C(x_3,y_3)$</p>
+<script type="math/tex; mode=display">(x_1-x_0)^2+(y_1-y_0)^2=r^2 (1)</script><script type="math/tex; mode=display">(x_2-x_0)^2+(y_2-y_0)^2=r^2 (2)</script><script type="math/tex; mode=display">(x_3-x_0)^2+(y_3-y_0)^2=r^2 (3)</script><script type="math/tex; mode=display">(x_1-x_2)x_0+(y_1-y_2)y_0=\frac{x_1^2+y_1^2-x_2^2-x_2^2}{2}\ (1)-(2)</script><script type="math/tex; mode=display">(x_2-x_3)x_0+(y_2-y_3)y_0=\frac{x_2^2+y_2^2-x_3^2-x_3^2}{2}\ (2)-(3)</script><p>解一次方程组即可</p>
+<p>这道题精髓在于random_shuffle之后，依次往里面加点，下面考虑证明时间复杂度</p>
+<p>如果由$i$循环进入$j$循环，必须满足$i$不在$\{1\dots i-1\}$构成的圆内，最大的概率是$\frac{3}{i}$，则$T_1(n)=O(n)+\sum_{i=1}^{n}\frac{3}{i}\cdot T_2(i)$</p>
+<p>如果由$j$循环进入$k$循环，此时最小圆已经是$\{1\dots j-1\}\bigcup \{i\}$的最小圆了，概率最大也是$\frac{3}{j}$，则$T_2(i)=O(i)+\sum_{j=1}^i T_3(j)$</p>
+<p>综合起来，便是线性的</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>3点圆怎么就这么难解？？！</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-12</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">P</span>&#123;</span></span><br><span class="line">	<span class="keyword">double</span> x, y;</span><br><span class="line">&#125;p[maxn]; <span class="keyword">int</span> n;</span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">dis</span><span class="params">(P a, P b)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">std</span>::<span class="built_in">sqrt</span>((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">P <span class="title">circle</span><span class="params">(<span class="keyword">double</span> &amp;r, P A, P B, P C)</span></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> a = (B.x * B.x + B.y * B.y - A.x * A.x - A.y * A.y) / <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">double</span> b = (C.x * C.x + C.y * C.y - A.x * A.x - A.y * A.y) / <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">double</span> c = B.x - A.x, d = B.y - A.y;</span><br><span class="line">	<span class="keyword">double</span> e = C.x - A.x, f = C.y - A.y;</span><br><span class="line">	P res = (P)&#123;(a * f - b * d) / (c * f - e * d), (b * c - a * e) / (c * f - e * d)&#125;;</span><br><span class="line">	r = dis(res, A);</span><br><span class="line">	<span class="keyword">return</span> res; </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">scanf</span>(<span class="string">"%lf%lf"</span>, &amp;p[i].x, &amp;p[i].y);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">std</span>::random_shuffle(p + <span class="number">1</span>, p + n + <span class="number">1</span>);</span><br><span class="line">	<span class="keyword">double</span> r = <span class="number">0</span>; P O = p[<span class="number">1</span>]; </span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (dis(p[i], O) &gt; r + eps)&#123;</span><br><span class="line">			O = p[i]; r = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; j++)&#123;</span><br><span class="line">				<span class="keyword">if</span> (dis(p[j], O) &gt; r + eps)&#123;</span><br><span class="line">					O = (P)&#123;(p[i].x + p[j].x) / <span class="number">2</span>, (p[i].y + p[j].y) / <span class="number">2</span>&#125;;</span><br><span class="line">					r = dis(O, p[j]);</span><br><span class="line">					<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt; j; k++)</span><br><span class="line">						<span class="keyword">if</span> (dis(O, p[k]) &gt; r + eps) O = circle(r, p[i], p[j], p[k]);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">printf</span>(<span class="string">"%.10lf\n%.10lf %.10lf\n"</span>, r, O.x, O.y);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>洛谷</category>
+      </categories>
+      <tags>
+        <tag>计算几何</tag>
+        <tag>概率期望</tag>
+        <tag>随机化</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[WC2008]游览计划</title>
     <url>/2020/03/05/%5BWC2008%5D%E6%B8%B8%E8%A7%88%E8%AE%A1%E5%88%92/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>在$n\cdot m$的网格中有$K$个关键点，打通非关键点需要一定费用</p>
@@ -336,9 +376,9 @@
         <category>Atcoder</category>
       </categories>
       <tags>
+        <tag>idea</tag>
         <tag>博弈论</tag>
         <tag>杨氏图</tag>
-        <tag>idea</tag>
       </tags>
   </entry>
   <entry>
@@ -357,8 +397,8 @@
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>idea</tag>
         <tag>二分答案</tag>
+        <tag>idea</tag>
         <tag>整体二分</tag>
         <tag>图论</tag>
       </tags>
@@ -900,7 +940,7 @@ P_i = \sum_{j=0}^{r} f_{i-1,j} \cdot (1 - (1 - p_i)^{r-j})</script><p>统计答�
       </categories>
       <tags>
         <tag>动态规划Dp</tag>
-        <tag>期望</tag>
+        <tag>概率期望</tag>
       </tags>
   </entry>
   <entry>
@@ -1606,8 +1646,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
       <tags>
         <tag>图论</tag>
         <tag>调试很久</tag>
-        <tag>网络流</tag>
         <tag>二分图</tag>
+        <tag>网络流</tag>
         <tag>构造</tag>
       </tags>
   </entry>
