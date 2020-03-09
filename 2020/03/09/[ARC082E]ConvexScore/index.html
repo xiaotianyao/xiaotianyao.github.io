@@ -13,11 +13,9 @@
     
 
     
-        <meta name="description" content="题意有$n$堆糖果$\{a_i\}$，每次可以吃掉一颗或者把最多的一堆吃完，问先手的胜负
-题解把糖果排列成这样：123451000000000001110000000000011000000001000
-行动被描述为一条折线，往下是吃完一堆，往右是吃一颗
-然后会发现左上-右下对角线上胜负态相同
-找到"/>
+        <meta name="description" content="题意如果一个点集$S​$的所有点能连接成为一个凸包（内角严格小于180），那么设所有在凸包边、角、内部的点数为$n​$，$S​$的贡献为$2^{n-|S|}​$
+给出点集，求贡献和，$n\leq 200​$
+题解转化问题就会发现，$2^k$的贡献可以视为分给$S\bigcup T$，其中$T$是在凸"/>
     
 
     <!--Author-->
@@ -27,16 +25,14 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="[AGC002E]Candy Piles"/>
+        <meta property="og:title" content="[ARC082E]ConvexScore"/>
     
 
     <!--Open Graph Description-->
     
-        <meta property="og:description" content="题意有$n$堆糖果$\{a_i\}$，每次可以吃掉一颗或者把最多的一堆吃完，问先手的胜负
-题解把糖果排列成这样：123451000000000001110000000000011000000001000
-行动被描述为一条折线，往下是吃完一堆，往右是吃一颗
-然后会发现左上-右下对角线上胜负态相同
-找到"/>
+        <meta property="og:description" content="题意如果一个点集$S​$的所有点能连接成为一个凸包（内角严格小于180），那么设所有在凸包边、角、内部的点数为$n​$，$S​$的贡献为$2^{n-|S|}​$
+给出点集，求贡献和，$n\leq 200​$
+题解转化问题就会发现，$2^k$的贡献可以视为分给$S\bigcup T$，其中$T$是在凸"/>
     
 
     <!--Open Graph Site Name-->
@@ -63,7 +59,7 @@
 
     <!-- Title -->
     
-    <title>[AGC002E]Candy Piles - XiaoTianyao&#39;s Blog</title>
+    <title>[ARC082E]ConvexScore - XiaoTianyao&#39;s Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -168,18 +164,18 @@
     <!-- Page Header -->
 <!-- Set your background image for this header in your post front-matter: cover -->
 
-<header class="intro-header" style="background-image: url('/img/barry.jpg')">
+<header class="intro-header" style="background-image: url('/img/animals.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
-                    <h1>[AGC002E]Candy Piles</h1>
+                    <h1>[ARC082E]ConvexScore</h1>
                     
                     <span class="meta">
                         <!-- Date and Author -->
                         
                         
-                            2020-02-13
+                            2020-03-09
                         
                     </span>
                 </div>
@@ -200,7 +196,7 @@
                         
 
 
-<a href="/tags/博弈论/">#博弈论</a> <a href="/tags/杨氏图/">#杨氏图</a> <a href="/tags/idea/">#idea</a>
+<a href="/tags/idea/">#idea</a> <a href="/tags/计算几何/">#计算几何</a>
 
 
                     
@@ -220,13 +216,13 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>有$n$堆糖果$\{a_i\}$，每次可以吃掉一颗或者把最多的一堆吃完，问先手的胜负</p>
-<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>把糖果排列成这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">100000000000</span><br><span class="line">111000000000</span><br><span class="line">001100000</span><br><span class="line">0001</span><br><span class="line">000</span><br></pre></td></tr></table></figure></p>
-<p>行动被描述为一条折线，往下是吃完一堆，往右是吃一颗</p>
-<p>然后会发现左上-右下对角线上胜负态相同</p>
-<p>找到对角线上离边界最近的，若与其中一条边界相距距离为奇数则必胜</p>
+                <h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>如果一个点集$S​$的所有点能连接成为一个凸包（内角严格小于180），那么设所有在凸包边、角、内部的点数为$n​$，$S​$的贡献为$2^{n-|S|}​$</p>
+<p>给出点集，求贡献和，$n\leq 200​$</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>转化问题就会发现，$2^k$的贡献可以视为分给$S\bigcup T$，其中$T$是在凸包但不属于$S$的集合，每个$S\bigcup  T$都有1的贡献</p>
+<p>进一步，每个面积不为0的点集一定有一个确定的$S$，从而也有确定的$T​$，那么具有1的贡献</p>
+<p>问题变成求面积不为0的点集数</p>
 <h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>无</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> a[maxn], n;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;x, <span class="keyword">const</span> <span class="keyword">int</span> &amp;y)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x &gt; y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">"%d"</span>, a + i);</span><br><span class="line">	sort(a + <span class="number">1</span>, a + n + <span class="number">1</span>, cmp);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (i + <span class="number">1</span> &gt; a[i + <span class="number">1</span>])&#123;</span><br><span class="line">			<span class="keyword">int</span> ans = <span class="number">0</span>, j = i;</span><br><span class="line">			<span class="keyword">while</span> (a[j + <span class="number">1</span>] == i) ++j;</span><br><span class="line">			ans = ((a[i] - i) &amp; <span class="number">1</span>) | ((j - i) &amp; <span class="number">1</span>); </span><br><span class="line">			<span class="keyword">if</span> (ans) <span class="built_in">puts</span>(<span class="string">"First"</span>);</span><br><span class="line">			<span class="keyword">else</span> <span class="built_in">puts</span>(<span class="string">"Second"</span>);</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LL long long</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">205</span>;</span><br><span class="line"><span class="keyword">const</span> LL mo = <span class="number">998244353</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> x[maxn], y[maxn], n;</span><br><span class="line">LL ans = <span class="number">0</span>, pw[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, x + i, y + i);</span><br><span class="line">	pw[<span class="number">0</span>] = <span class="number">1</span>; <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) pw[i] = pw[i - <span class="number">1</span>] * <span class="number">2</span> % mo; </span><br><span class="line">	ans = (pw[n] - <span class="number">1</span> - n + mo) % mo;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt;= n; j++)&#123;</span><br><span class="line">			<span class="keyword">int</span> tmp = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= n; k++)&#123;</span><br><span class="line">				<span class="keyword">if</span> (x[k] &gt;= min(x[i], x[j]) &amp;&amp; x[k] &lt;= max(x[i], x[j]) &amp;&amp; y[k] &gt;= min(y[i], y[j]) &amp;&amp; y[k] &lt;= max(y[i], y[j]))&#123;</span><br><span class="line">					<span class="keyword">if</span> ((y[k] - y[i]) * (x[j] - x[k]) == (x[k] - x[i]) * (y[j] - y[k])) ++tmp;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			ans = (ans - pw[tmp - <span class="number">2</span>] + mo) % mo;</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
                 
