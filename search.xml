@@ -39,6 +39,45 @@
       </categories>
   </entry>
   <entry>
+    <title>[ARC083E]Bichrome Tree</title>
+    <url>/2020/03/10/%5BARC083E%5DBichrome%20Tree/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>对一棵树随意黑白染色并赋予权值，使得满足所有节点的子树中颜色和该节点相同的权值和为给出的$x_u$</p>
+<p>问是否可行，$n\leq 1000,x\leq 5000$</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>发现我们并不关心黑白的区别，也就是说一棵子树中某种颜色的权值和为$x_u$</p>
+<p>考虑满足$x_u$之后另一种颜色，显然越小越好，这样回手空间最大</p>
+<p>令$res_u$为满足$x_u$之后另一种颜色权值和最小值，可以通过对于每个子节点选$x_v$或$res_v$Dp得到</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>impossible拼错了<del>王老师别打我</del></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1005</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxV = <span class="number">5005</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">E</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> to, nxt;</span><br><span class="line">&#125;e[maxn];</span><br><span class="line"><span class="keyword">int</span> head[maxn], tot = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v)</span></span>&#123;</span><br><span class="line">	e[++tot].to = v, e[tot].nxt = head[u];</span><br><span class="line">	head[u] = tot;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> n, res[maxn], x[maxn];</span><br><span class="line"><span class="keyword">int</span> f[maxV];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> cur)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = head[cur]; i; i = e[i].nxt) dfs(e[i].to);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= x[cur]; i++) f[i] = INF; f[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = head[cur]; i; i = e[i].nxt)&#123;</span><br><span class="line">		<span class="keyword">int</span> v = e[i].to;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = x[cur]; j &gt;= <span class="number">0</span>; j--)&#123;</span><br><span class="line">			<span class="keyword">int</span> tmp = INF;</span><br><span class="line">			<span class="keyword">if</span> (j &gt;= res[v]) tmp = min(tmp, f[j - res[v]] + x[v]);</span><br><span class="line">			<span class="keyword">if</span> (j &gt;= x[v]) tmp = min(tmp, f[j - x[v]] + res[v]);</span><br><span class="line">			f[j] = tmp;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= x[cur]; i++) res[cur] = min(res[cur], f[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n); <span class="built_in">memset</span>(res, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> res);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> f, i = <span class="number">2</span>; i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;f); addedge(f, i);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">"%d"</span>, x + i);</span><br><span class="line">	dfs(<span class="number">1</span>);</span><br><span class="line">	<span class="keyword">if</span> (res[<span class="number">1</span>] != INF) <span class="built_in">puts</span>(<span class="string">"POSSIBLE"</span>);</span><br><span class="line">	<span class="keyword">else</span> <span class="built_in">puts</span>(<span class="string">"IMPOSSIBLE"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Atcoder</category>
+      </categories>
+      <tags>
+        <tag>动态规划Dp</tag>
+        <tag>树</tag>
+        <tag>贪心</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[ARC082F]Sandglass</title>
+    <url>/2020/03/10/%5BARC082F%5DSandglass/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>一个沙漏上下部分最大容量均为$X$，已知在$\{r_k\}$时刻把沙漏倒过来</p>
+<p>$Q$个询问，每次询问若初始时上面部分有$a$，下半部分有$X-a$，时间为$t$时上半部分的含量</p>
+<p>$n,Q\leq 10^5$</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>其实就是一根折线，斜率为-1,0,1，范围在$[0,X]​$内，多次改变起点高度，问某处的值</p>
+<p>如果$a_i\leq a_j$，那么当$t$相等时，前者的值必然不大于后者</p>
+<p>这样就可以用起点为0和X的两条折线进行限制，维护两条折线即可</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>nQ搞糊涂了</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">QNode</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> t, a, res, id;</span><br><span class="line">	<span class="keyword">bool</span> <span class="keyword">operator</span>&lt; (QNode x)<span class="keyword">const</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> t &lt; x.t || (t == x.t &amp;&amp; a &lt; x.a);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;q[maxn]; <span class="keyword">int</span> X, n, Q, r[maxn], opt = <span class="number">-1</span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmpid</span><span class="params">(QNode x, QNode y)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x.id &lt; y.id;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;X, &amp;n); <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">"%d"</span>, r + i);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;Q); <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= Q; i++) <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;q[i].t, &amp;q[i].a), q[i].id = i;</span><br><span class="line">	sort(q + <span class="number">1</span>, q + Q + <span class="number">1</span>);</span><br><span class="line">	<span class="keyword">int</span> lr = <span class="number">0</span>, lq = <span class="number">1</span>, u = X, d = <span class="number">0</span>, S = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span> (lq &lt;= Q)&#123;</span><br><span class="line">		<span class="keyword">if</span> (r[lr + <span class="number">1</span>] &lt; q[lq].t &amp;&amp; lr &lt; n)&#123;</span><br><span class="line">			++lr; <span class="keyword">int</span> t = opt * (r[lr] - r[lr - <span class="number">1</span>]);</span><br><span class="line">			d = max(<span class="number">0</span>, min(X, d + t));</span><br><span class="line">			u = max(<span class="number">0</span>, min(X, u + t));</span><br><span class="line">			S += t; opt *= <span class="number">-1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			q[lq].res = max(d, min(u, S + q[lq].a));</span><br><span class="line">			q[lq].res = min(X, max(<span class="number">0</span>, q[lq].res + opt * (q[lq].t - r[lr])));</span><br><span class="line">			++lq;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; sort(q + <span class="number">1</span>, q + Q + <span class="number">1</span>, cmpid);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= Q; i++) <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, q[i].res);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Atcoder</category>
+      </categories>
+      <tags>
+        <tag>idea</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[ARC082E]ConvexScore</title>
     <url>/2020/03/09/%5BARC082E%5DConvexScore/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>如果一个点集$S​$的所有点能连接成为一个凸包（内角严格小于180），那么设所有在凸包边、角、内部的点数为$n​$，$S​$的贡献为$2^{n-|S|}​$</p>
@@ -151,9 +190,9 @@
         <category>洛谷</category>
       </categories>
       <tags>
+        <tag>计算几何</tag>
         <tag>随机化</tag>
         <tag>概率期望</tag>
-        <tag>计算几何</tag>
       </tags>
   </entry>
   <entry>
@@ -334,8 +373,8 @@
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>线性筛</tag>
         <tag>差分</tag>
+        <tag>线性筛</tag>
         <tag>二分图</tag>
       </tags>
   </entry>
@@ -454,9 +493,9 @@
         <category>Atcoder</category>
       </categories>
       <tags>
+        <tag>idea</tag>
         <tag>博弈论</tag>
         <tag>杨氏图</tag>
-        <tag>idea</tag>
       </tags>
   </entry>
   <entry>
@@ -475,8 +514,8 @@
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>idea</tag>
         <tag>二分答案</tag>
+        <tag>idea</tag>
         <tag>整体二分</tag>
         <tag>图论</tag>
       </tags>
@@ -736,8 +775,8 @@
       </categories>
       <tags>
         <tag>网络流</tag>
-        <tag>构造</tag>
         <tag>最大流</tag>
+        <tag>构造</tag>
       </tags>
   </entry>
   <entry>
@@ -1317,8 +1356,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
@@ -1557,9 +1596,9 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>SOJ</category>
       </categories>
       <tags>
+        <tag>计算几何</tag>
         <tag>扫描线</tag>
         <tag>set</tag>
-        <tag>计算几何</tag>
       </tags>
   </entry>
   <entry>
@@ -1599,8 +1638,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
         <tag>递归</tag>
         <tag>调试很久</tag>
       </tags>
