@@ -39,6 +39,27 @@
       </categories>
   </entry>
   <entry>
+    <title>[ARC085F]NRE</title>
+    <url>/2020/03/12/%5BARC085F%5DNRE/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>有全0序列$\{a_i\}$，共有$Q$种操作，可以把$[l_i,r_i]$中的全部变成1</p>
+<p>问任意次操作后与给出01序列$\{b_i\}$不同的最小值</p>
+<p>$n,Q\leq 2\cdot 10^5$</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>题目问的是$\sum [a_i=0][b_i=1]+\sum[a_i=1][b_i=0]$，转化一下变成$\sum[a_i=0][b_i=1]-\sum[a_i=0][b_i=0]+\sum[b_i=0]$</p>
+<p>把前两项的差最小化即可</p>
+<p>两种转移，$f_i=f_{i-1}+(-1)^{b_i+1}$或者用操作$f_i=\min_{i-1\leq j\leq r_i} f_j$，这里要求$f_j​$必须是可以继续合法操作的点，这里用线段树维护一下</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>$f_{i-1}$转移到$f_{r_i}$是合法的，要考虑</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">2e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">T</span>&#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">A</span>&#123;</span></span><br><span class="line">		<span class="keyword">int</span> l, r, Min;</span><br><span class="line">	&#125;a[maxn &lt;&lt; <span class="number">2</span>];</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">(<span class="keyword">int</span> cur, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span>&#123;</span><br><span class="line">		a[cur].l = l, a[cur].r = r;</span><br><span class="line">		a[cur].Min = INF;</span><br><span class="line">		<span class="keyword">if</span> (l == r) <span class="keyword">return</span>;</span><br><span class="line">		<span class="keyword">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">		build(cur &lt;&lt; <span class="number">1</span>, l, mid);</span><br><span class="line">		build(cur &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid + <span class="number">1</span>, r);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">upd</span><span class="params">(<span class="keyword">int</span> cur, <span class="keyword">int</span> p, <span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (a[cur].l == a[cur].r)&#123;</span><br><span class="line">			a[cur].Min = min(a[cur].Min, k);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> mid = a[cur].l + a[cur].r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">if</span> (p &lt;= mid) upd(cur &lt;&lt; <span class="number">1</span>, p, k);</span><br><span class="line">		<span class="keyword">else</span> upd(cur &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, p, k);</span><br><span class="line">		a[cur].Min = min(a[cur &lt;&lt; <span class="number">1</span>].Min, a[cur &lt;&lt; <span class="number">1</span> | <span class="number">1</span>].Min);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">Query</span><span class="params">(<span class="keyword">int</span> cur, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (a[cur].l &gt; r || a[cur].r &lt; l) <span class="keyword">return</span> INF;</span><br><span class="line">		<span class="keyword">if</span> (a[cur].l &gt;= l &amp;&amp; a[cur].r &lt;= r) <span class="keyword">return</span> a[cur].Min;</span><br><span class="line">		<span class="keyword">return</span> min(Query(cur &lt;&lt; <span class="number">1</span>, l, r), Query(cur &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, l, r));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;t;</span><br><span class="line"><span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; v[maxn];</span><br><span class="line"><span class="keyword">int</span> n, Q, b[maxn], f[maxn], S = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n); <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">"%d"</span>, b + i), S += (<span class="number">1</span> - b[i]);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;Q);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> l, r, i = <span class="number">1</span>; i &lt;= Q; i++)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;l, &amp;r);</span><br><span class="line">		v[l].push_back(r);</span><br><span class="line">	&#125; t.build(<span class="number">1</span>, <span class="number">1</span>, n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) sort(v[i].begin(), v[i].end());</span><br><span class="line">	<span class="built_in">memset</span>(f, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> f); f[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; v[i].size(); j++)&#123;</span><br><span class="line">			<span class="keyword">int</span> r = v[i][j]; <span class="keyword">int</span> tmp = min(f[i - <span class="number">1</span>], t.Query(<span class="number">1</span>, max(<span class="number">1</span>, i - <span class="number">1</span>), r));</span><br><span class="line">			<span class="keyword">if</span> (tmp &lt; f[r]) t.upd(<span class="number">1</span>, r, f[r] = tmp);</span><br><span class="line">		&#125;</span><br><span class="line">		f[i] = min(f[i], f[i - <span class="number">1</span>] + ((b[i] == <span class="number">1</span>) ? <span class="number">1</span> : <span class="number">-1</span>));</span><br><span class="line">	&#125; <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, S + f[n]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Atcoder</category>
+      </categories>
+      <tags>
+        <tag>idea</tag>
+        <tag>动态规划Dp</tag>
+        <tag>线段树</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[ARC085E]MUL</title>
     <url>/2020/03/11/%5BARC085E%5DMUL/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>在序列$\{a_i\}$中可以任意次把编号为某个数倍数的全部删除，使得剩下的权值和最大</p>
@@ -72,8 +93,8 @@
       </categories>
       <tags>
         <tag>动态规划Dp</tag>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
@@ -271,8 +292,8 @@
         <category>ZJOI</category>
       </categories>
       <tags>
-        <tag>动态规划Dp</tag>
         <tag>图论</tag>
+        <tag>动态规划Dp</tag>
         <tag>最短路</tag>
       </tags>
   </entry>
@@ -637,8 +658,8 @@
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>动态规划Dp</tag>
         <tag>idea</tag>
+        <tag>动态规划Dp</tag>
         <tag>前缀和</tag>
       </tags>
   </entry>
@@ -752,8 +773,8 @@
         <category>TJOI</category>
       </categories>
       <tags>
-        <tag>动态规划Dp</tag>
         <tag>idea</tag>
+        <tag>动态规划Dp</tag>
         <tag>网络流</tag>
         <tag>Dilworth</tag>
       </tags>
@@ -876,8 +897,8 @@
         <category>Codeforces</category>
       </categories>
       <tags>
-        <tag>动态规划Dp</tag>
         <tag>idea</tag>
+        <tag>动态规划Dp</tag>
         <tag>前缀和</tag>
       </tags>
   </entry>
@@ -1190,8 +1211,8 @@ ans = max\{f_{A\in S} + f_{B\in T}\}</script><p>预处理Max即可</p>
 f_S=min\{f_{S-\{i\}}+c\}</script><h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>无</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> f[<span class="number">1</span> &lt;&lt; <span class="number">20</span>], n, m, c[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"><span class="keyword">char</span> str[(<span class="keyword">int</span>)<span class="number">1e5</span>];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d%s"</span>, &amp;n, &amp;m, str);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) c[str[i] - <span class="string">'a'</span>][str[i + <span class="number">1</span>] - <span class="string">'a'</span>]++, c[str[i + <span class="number">1</span>] - <span class="string">'a'</span>][str[i] - <span class="string">'a'</span>]++;</span><br><span class="line">	<span class="built_in">memset</span>(f, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> f); f[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; (<span class="number">1</span> &lt;&lt; m); i++)&#123;</span><br><span class="line">		<span class="keyword">int</span> t = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++)</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> k = j + <span class="number">1</span>; k &lt; m; k++)</span><br><span class="line">				<span class="keyword">if</span> ((i &gt;&gt; j &amp; <span class="number">1</span>) ^ (i &gt;&gt; k &amp; <span class="number">1</span>)) t += c[j][k];</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++)</span><br><span class="line">			<span class="keyword">if</span> (i &gt;&gt; j &amp; <span class="number">1</span>) f[i] = min(f[i], f[i ^ (<span class="number">1</span> &lt;&lt; j)] + t);</span><br><span class="line">	&#125; <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, f[(<span class="number">1</span> &lt;&lt; m) - <span class="number">1</span>]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
-        <tag>动态规划Dp</tag>
         <tag>idea</tag>
+        <tag>动态规划Dp</tag>
         <tag>状态压缩</tag>
       </tags>
   </entry>
@@ -1230,8 +1251,8 @@ f_{i,x_{i-1}}=min\{min\{f_{i-1,j}+|j-x_i|\},f_{i-1,x_{i-1}}+|x_i-x_{i-1}|\}\\
         <category>AHOI</category>
       </categories>
       <tags>
-        <tag>动态规划Dp</tag>
         <tag>idea</tag>
+        <tag>动态规划Dp</tag>
       </tags>
   </entry>
   <entry>
@@ -1374,8 +1395,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
@@ -1656,8 +1677,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
         <tag>递归</tag>
         <tag>调试很久</tag>
       </tags>
