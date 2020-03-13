@@ -39,6 +39,35 @@
       </categories>
   </entry>
   <entry>
+    <title>[PKUWC2018]Slay the Spire</title>
+    <url>/2020/03/13/%5BPKUWC2018%5DSlay%20the%20Spire/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>有$n$张强化牌和$n$张攻击牌，强化牌权值为$\{a_i\}$，能使得后面的攻击伤害乘上$a_i$，攻击牌点数为$\{b_i\}$造成相应的伤害</p>
+<p>随机在$2n$张牌里抽出$m$张，在$m$张牌里面以造成最大伤害的方式出$k$张牌，求所有情况下的伤害之和</p>
+<p>$k\leq m\leq 2n\leq 3000$，对$998244353$取模，保证$a_i &gt; 1$</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>先考虑子问题，最优的情况一定是在至少出1张攻击牌的情况下出权值尽量大且尽量多的强化牌</p>
+<p>如果能得知强化牌和攻击牌的情况，最后的答案容易合并</p>
+<p>令$f_{i,j,0}$为前i张强化牌里面选j张的所有情况的积的和，$g_{i,j,0}$为前i张攻击牌里面选j张的所有情况的和的和</p>
+<p>我们还要知道关于选择的最小值的情况，令$f_{i,j,1}$为前i张强化牌里面选j张且最小的是第i张的所有情况的积的和，$g_{i,j,1}$同理</p>
+<script type="math/tex; mode=display">
+f_{i,j,0}=f_{i-1,j,0}+a_i\cdot f_{i-1,j-1,0}\\
+f_{i,j,1}=a_i\cdot f_{i-1,j-1,0}\\</script><script type="math/tex; mode=display">
+g_{i,j,0}=g_{i-1,j,0}+b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}\\
+g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化牌选择是否足够$k-1$张来考虑</p>
+<p>若不足$k-1​$，则贡献为$\sum f_{n,x, 0}\cdot g_{j,k-x, 1}\cdot \binom{n-j}{m-k}​$</p>
+<p>若足够$k-1$，则贡献为$\sum f_{i,k-1,1}\cdot g_{j,1,1}\cdot \binom{2n-i-j}{m-k}$，这里$g_{j,1,1}$其实就是$b_j$</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>刚好k-1的情况算了两遍</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cctype&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LL long long</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">3005</span>;</span><br><span class="line"><span class="keyword">const</span> LL mo = <span class="number">998244353</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> LL <span class="title">read</span><span class="params">()</span></span>&#123;</span><br><span class="line">	LL x = <span class="number">0</span>; <span class="keyword">char</span> ch = getchar();</span><br><span class="line">	<span class="keyword">while</span> (!<span class="built_in">isdigit</span>(ch)) ch = getchar();</span><br><span class="line">	<span class="keyword">while</span> (<span class="built_in">isdigit</span>(ch)) x = x * <span class="number">10</span> + (ch &amp; <span class="number">15</span>), ch = getchar();</span><br><span class="line">	<span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LL <span class="title">pow</span><span class="params">(LL x, LL t)</span></span>&#123;</span><br><span class="line">	LL res = <span class="number">1</span>; x %= mo;</span><br><span class="line">	<span class="keyword">while</span> (t &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span> (t &amp; <span class="number">1</span>) res = res * x % mo;</span><br><span class="line">		x = x * x % mo;</span><br><span class="line">		t &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line">LL f[maxn][maxn][<span class="number">2</span>], g[maxn][maxn][<span class="number">2</span>];</span><br><span class="line">LL fac[maxn], inv[maxn], a[maxn], b[maxn];</span><br><span class="line">LL c[maxn][maxn];</span><br><span class="line"><span class="function">LL <span class="title">C</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> m)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (m == <span class="number">0</span> || m == n) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span> (m &gt; n) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">return</span> c[n][m];</span><br><span class="line">	<span class="keyword">return</span> <span class="number">1l</span>l * fac[n] * inv[m] % mo * inv[n - m] % mo;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> T, n, m, k;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;T); <span class="keyword">int</span> pre = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (T--)&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>, &amp;n, &amp;m, &amp;k);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) a[i] = read(); sort(a + <span class="number">1</span>, a + n + <span class="number">1</span>, greater&lt;LL&gt;());</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) b[i] = read(); sort(b + <span class="number">1</span>, b + n + <span class="number">1</span>, greater&lt;LL&gt;());</span><br><span class="line"><span class="comment">//		fac[0] = 1; for (int i = 1; i &lt;= 2 * n; i++) fac[i] = fac[i - 1] * i % mo;</span></span><br><span class="line"><span class="comment">//		inv[2 * n] = pow(fac[2 * n], mo - 2);</span></span><br><span class="line"><span class="comment">//		for (int i = 2 * n - 1; i &gt;= 1; i--) inv[i] = inv[i + 1] * (i + 1) % mo;</span></span><br><span class="line">		c[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = pre; i &lt;= <span class="number">2</span> * n; i++)</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= i; j++)</span><br><span class="line">				c[i][j] = (c[i - <span class="number">1</span>][j] + c[i - <span class="number">1</span>][j - <span class="number">1</span>]) % mo;</span><br><span class="line">		f[<span class="number">0</span>][<span class="number">0</span>][<span class="number">1</span>] = <span class="number">1</span>; f[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">			f[i][<span class="number">0</span>][<span class="number">1</span>] = <span class="number">1l</span>l;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= i; j++)&#123;</span><br><span class="line">				f[i][j][<span class="number">1</span>] = (f[i - <span class="number">1</span>][j][<span class="number">1</span>] + <span class="number">1l</span>l * a[i] * f[i - <span class="number">1</span>][j - <span class="number">1</span>][<span class="number">1</span>] % mo) % mo;</span><br><span class="line">				f[i][j][<span class="number">0</span>] = <span class="number">1l</span>l * a[i] * f[i - <span class="number">1</span>][j - <span class="number">1</span>][<span class="number">1</span>] % mo;</span><br><span class="line">				g[i][j][<span class="number">1</span>] = (g[i - <span class="number">1</span>][j][<span class="number">1</span>] + <span class="number">1l</span>l * C(i - <span class="number">1</span>, j - <span class="number">1</span>) * b[i] % mo + g[i - <span class="number">1</span>][j - <span class="number">1</span>][<span class="number">1</span>]) % mo;</span><br><span class="line">				g[i][j][<span class="number">0</span>] = (<span class="number">1l</span>l * C(i - <span class="number">1</span>, j - <span class="number">1</span>) * b[i] % mo + g[i - <span class="number">1</span>][j - <span class="number">1</span>][<span class="number">1</span>]) % mo;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; LL ans = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">0</span>; x &lt; k - <span class="number">1</span>; x++)</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)</span><br><span class="line">				ans = (ans + <span class="number">1l</span>l * f[n][x][<span class="number">1</span>] * g[j][k - x][<span class="number">0</span>] % mo * C(n - j, m - k) % mo) % mo;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = k - <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)</span><br><span class="line">				ans = (ans + <span class="number">1l</span>l * f[i][k - <span class="number">1</span>][<span class="number">0</span>] * b[j] % mo * C(n - i + n - j, m - k) % mo) % mo;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans); pre = <span class="number">2</span> * n;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>PKUWC</category>
+      </categories>
+      <tags>
+        <tag>组合数学</tag>
+        <tag>动态规划Dp</tag>
+        <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[ARC085F]NRE</title>
     <url>/2020/03/12/%5BARC085F%5DNRE/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>有全0序列$\{a_i\}$，共有$Q$种操作，可以把$[l_i,r_i]$中的全部变成1</p>
@@ -93,8 +122,8 @@
       </categories>
       <tags>
         <tag>动态规划Dp</tag>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -1395,8 +1424,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -1677,8 +1706,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
         <tag>递归</tag>
         <tag>调试很久</tag>
       </tags>
