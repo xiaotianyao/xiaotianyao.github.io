@@ -39,6 +39,24 @@
       </categories>
   </entry>
   <entry>
+    <title>[POJ1741]Tree</title>
+    <url>/2020/03/15/%5BPOJ1741%5DTree/</url>
+    <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>求树上路径长$\leq k$的路径条数，$n\leq 10^4$</p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>点分治，递归处理重心</p>
+<p>用根为 $cur$ 的整棵树的答案减去以 $v$ 为根的每个子树中的答案就是合法的答案</p>
+<p>处理过的重心打上vis隔开</p>
+<h3 id="调试记录"><a href="#调试记录" class="headerlink" title="调试记录"></a>调试记录</h3><p>求子树重心的时候totsz最好传sz[v]&gt;sz[u]?totsz-sz[u]?sz[v]</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e4</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">E</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> to, nxt, l;</span><br><span class="line">&#125;e[maxn &lt;&lt; <span class="number">1</span>];</span><br><span class="line"><span class="keyword">int</span> head[maxn], tot = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v, <span class="keyword">int</span> l)</span></span>&#123;</span><br><span class="line">	e[++tot].to = v, e[tot].nxt = head[u], e[tot].l = l;</span><br><span class="line">	head[u] = tot;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">bool</span> vis[maxn]; </span><br><span class="line"><span class="keyword">int</span> n, k, sz[maxn], dis[maxn], Max[maxn], rt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getRt</span><span class="params">(<span class="keyword">int</span> cur, <span class="keyword">int</span> fa, <span class="keyword">int</span> totsz)</span></span>&#123;</span><br><span class="line">	sz[cur] = <span class="number">1</span>; Max[cur] = <span class="number">-1</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = head[cur]; i; i = e[i].nxt)&#123;</span><br><span class="line">		<span class="keyword">int</span> v = e[i].to;</span><br><span class="line">		<span class="keyword">if</span> (v == fa || vis[v]) <span class="keyword">continue</span>;</span><br><span class="line">		getRt(v, cur, totsz);</span><br><span class="line">		sz[cur] += sz[v];</span><br><span class="line">		Max[cur] = max(Max[cur], sz[v]);</span><br><span class="line">	&#125; Max[cur] = max(Max[cur], totsz - sz[cur]);</span><br><span class="line">	<span class="keyword">if</span> (Max[cur] &lt; Max[rt]) rt = cur;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; v;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getDis</span><span class="params">(<span class="keyword">int</span> cur, <span class="keyword">int</span> fa)</span></span>&#123;</span><br><span class="line">	v.push_back(dis[cur]);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = head[cur]; i; i = e[i].nxt)&#123;</span><br><span class="line">		<span class="keyword">int</span> v = e[i].to;</span><br><span class="line">		<span class="keyword">if</span> (v == fa || vis[v]) <span class="keyword">continue</span>;</span><br><span class="line">		dis[v] = dis[cur] + e[i].l;</span><br><span class="line">		getDis(v, cur);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">calc</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> fa, <span class="keyword">int</span> d)</span></span>&#123;</span><br><span class="line">	dis[u] = d; v.clear(); getDis(u, fa);</span><br><span class="line">	sort(v.begin(), v.end());</span><br><span class="line">	<span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt;::iterator l = v.begin(), r = v.end() - <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span> (l != r)&#123;</span><br><span class="line">		<span class="keyword">if</span> (*r + *l &lt;= k) res += r - l, ++l;</span><br><span class="line">		<span class="keyword">else</span> --r;</span><br><span class="line">	&#125; <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> ans;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> cur, <span class="keyword">int</span> totsz)</span></span>&#123;</span><br><span class="line">	vis[cur] = <span class="number">1</span>; </span><br><span class="line">	ans += calc(cur, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = head[cur]; i; i = e[i].nxt)&#123;</span><br><span class="line">		<span class="keyword">int</span> v = e[i].to;</span><br><span class="line">		<span class="keyword">if</span> (vis[v]) <span class="keyword">continue</span>;</span><br><span class="line">		ans -= calc(v, cur, e[i].l);</span><br><span class="line">		rt = <span class="number">0</span>; <span class="keyword">int</span> ssz = sz[v] &gt; sz[cur] ? totsz - sz[cur] : sz[v];</span><br><span class="line">		getRt(v, cur, ssz);</span><br><span class="line">		dfs(rt, ssz);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;k);</span><br><span class="line">	<span class="keyword">while</span> (n != <span class="number">0</span>)&#123;</span><br><span class="line">		ans = <span class="number">0</span>; <span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span> vis);</span><br><span class="line">		<span class="built_in">memset</span>(head, <span class="number">0</span>, <span class="keyword">sizeof</span> head); tot = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> u, v, l, i = <span class="number">1</span>; i &lt; n; i++)&#123;</span><br><span class="line">			<span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>, &amp;u, &amp;v, &amp;l);</span><br><span class="line">			addedge(u, v, l); addedge(v, u, l);</span><br><span class="line">		&#125;</span><br><span class="line">		Max[<span class="number">0</span>] = INF; getRt(<span class="number">1</span>, rt = <span class="number">0</span>, n);</span><br><span class="line">		dfs(rt, n); <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, ans);</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;k);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>POJ</category>
+      </categories>
+      <tags>
+        <tag>树</tag>
+        <tag>点分治</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[PKUWC2018]Slay the Spire</title>
     <url>/2020/03/13/%5BPKUWC2018%5DSlay%20the%20Spire/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>有$n$张强化牌和$n$张攻击牌，强化牌权值为$\{a_i\}$，能使得后面的攻击伤害乘上$a_i$，攻击牌点数为$\{b_i\}$造成相应的伤害</p>
@@ -321,8 +339,8 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
         <category>ZJOI</category>
       </categories>
       <tags>
-        <tag>图论</tag>
         <tag>动态规划Dp</tag>
+        <tag>图论</tag>
         <tag>最短路</tag>
       </tags>
   </entry>
@@ -561,9 +579,9 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>idea</tag>
         <tag>博弈论</tag>
         <tag>杨氏图</tag>
+        <tag>idea</tag>
       </tags>
   </entry>
   <entry>
@@ -582,8 +600,8 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>二分答案</tag>
         <tag>idea</tag>
+        <tag>二分答案</tag>
         <tag>整体二分</tag>
         <tag>图论</tag>
       </tags>
@@ -737,8 +755,8 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
         <category>Artical</category>
       </categories>
       <tags>
-        <tag>Artical</tag>
         <tag>网络流</tag>
+        <tag>Artical</tag>
       </tags>
   </entry>
   <entry>
