@@ -39,6 +39,23 @@
       </categories>
   </entry>
   <entry>
+    <title>[Artical]自己出阅读理解啦</title>
+    <url>/2020/03/27/%5BArtical%5D%E8%87%AA%E5%B7%B1%E5%87%BA%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%E5%95%A6/</url>
+    <content><![CDATA[<h3 id="一、《鼠疫》阅读理解"><a href="#一、《鼠疫》阅读理解" class="headerlink" title="一、《鼠疫》阅读理解"></a>一、《鼠疫》阅读理解</h3><p><a href="https://doc.weiyun.com/acd3438ec723d252f1108d33c71a8437" target="_blank" rel="noopener">题目及答案</a></p>
+<h3 id="二、《霍乱时期的爱情》阅读理解"><a href="#二、《霍乱时期的爱情》阅读理解" class="headerlink" title="二、《霍乱时期的爱情》阅读理解"></a>二、《霍乱时期的爱情》阅读理解</h3><p><a href="https://doc.weiyun.com/828e70942c834f23e07fd1ec806c4b54" target="_blank" rel="noopener">题目及答案</a></p>
+<h3 id="三、《梨花疫》阅读理解-From-王馨跃"><a href="#三、《梨花疫》阅读理解-From-王馨跃" class="headerlink" title="三、《梨花疫》阅读理解 From 王馨跃"></a>三、《梨花疫》阅读理解 From 王馨跃</h3><p><a href="https://doc.weiyun.com/77107ec33fb3de8f956a4d2943db63a7" target="_blank" rel="noopener">题目</a></p>
+<p><a href="https://doc.weiyun.com/8c7f455f70378bce730443fdde4ae8a4" target="_blank" rel="noopener">我的答案</a></p>
+<p>三四天的劳动成果哈</p>
+<p>第一篇被范老师退回来了（<del>太土</del>）</p>
+]]></content>
+      <categories>
+        <category>Artical</category>
+      </categories>
+      <tags>
+        <tag>Artical</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[CF960H]Santa's Gift</title>
     <url>/2020/03/20/%5BCF960H%5DSanta&#39;s%20Gift/</url>
     <content><![CDATA[<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>给出一棵有$n$个节点的树，并染上$m$种颜色，给出$\{b_i\}$和$C$</p>
@@ -203,8 +220,8 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
       </categories>
       <tags>
         <tag>动态规划Dp</tag>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
@@ -502,8 +519,8 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
       <tags>
         <tag>数学</tag>
         <tag>线段树</tag>
-        <tag>向量</tag>
         <tag>树链剖分</tag>
+        <tag>向量</tag>
       </tags>
   </entry>
   <entry>
@@ -642,9 +659,9 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>idea</tag>
         <tag>博弈论</tag>
         <tag>杨氏图</tag>
+        <tag>idea</tag>
       </tags>
   </entry>
   <entry>
@@ -663,8 +680,8 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>二分答案</tag>
         <tag>idea</tag>
+        <tag>二分答案</tag>
         <tag>整体二分</tag>
         <tag>图论</tag>
       </tags>
@@ -1505,8 +1522,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
@@ -1787,8 +1804,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>贪心</tag>
         <tag>树</tag>
+        <tag>贪心</tag>
         <tag>递归</tag>
         <tag>调试很久</tag>
       </tags>
