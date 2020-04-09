@@ -225,8 +225,8 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
       </categories>
       <tags>
         <tag>动态规划Dp</tag>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -424,8 +424,8 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
         <category>ZJOI</category>
       </categories>
       <tags>
-        <tag>动态规划Dp</tag>
         <tag>图论</tag>
+        <tag>动态规划Dp</tag>
         <tag>最短路</tag>
       </tags>
   </entry>
@@ -664,9 +664,9 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
         <category>Atcoder</category>
       </categories>
       <tags>
+        <tag>idea</tag>
         <tag>博弈论</tag>
         <tag>杨氏图</tag>
-        <tag>idea</tag>
       </tags>
   </entry>
   <entry>
@@ -685,8 +685,8 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>idea</tag>
         <tag>二分答案</tag>
+        <tag>idea</tag>
         <tag>整体二分</tag>
         <tag>图论</tag>
       </tags>
@@ -840,8 +840,8 @@ g_{i,j,1}=b_i\cdot \binom{i-1}{j-1}+g_{i-1,j-1,0}</script><p>答案分为强化�
         <category>Artical</category>
       </categories>
       <tags>
-        <tag>Artical</tag>
         <tag>网络流</tag>
+        <tag>Artical</tag>
       </tags>
   </entry>
   <entry>
@@ -1527,8 +1527,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
       </tags>
   </entry>
   <entry>
@@ -1809,8 +1809,8 @@ sf_{T,j}=\sum_{1\leq i\leq j}f_{T,i,j}=(\sum_{1\leq i\leq j}p_l)\cdot p_{m-j}(ss
         <category>Atcoder</category>
       </categories>
       <tags>
-        <tag>树</tag>
         <tag>贪心</tag>
+        <tag>树</tag>
         <tag>递归</tag>
         <tag>调试很久</tag>
       </tags>
